@@ -5,7 +5,7 @@ on:
     branches: [ develop ]
   pull_request:
     types: [ready_for_review,review_requested]
-    branches: [ develop, release/** ]
+    branches: [ main, develop, release/** ]
 
 jobs:
   build:
