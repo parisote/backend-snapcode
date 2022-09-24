@@ -2,7 +2,6 @@ name: Backend CI
 
 on:
   pull_request:
-    types: [ready_for_review,review_requested]
     branches: [ main, develop, feature/**, release/** ]
 
 jobs:
