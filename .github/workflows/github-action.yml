@@ -1,8 +1,6 @@
 name: Backend CI
 
 on:
-  push:
-    branches: [ develop ]
   pull_request:
     types: [ready_for_review,review_requested]
     branches: [ main, feature/**, release/** ]
