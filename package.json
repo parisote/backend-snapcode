@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/parisote/backend-snapcode#readme",
   "dependencies": {
+    "@prisma/client": "^4.3.1",
     "chai": "^4.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
