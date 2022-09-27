@@ -4,12 +4,12 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const router = require('./routes/routes');
 
-const { setError } = require('./utils/utils');
-
 const app = express();
 app.set('port', process.env.PORT);
 
 app.use(express.json());
+app.use(express.urlencoded({extended:false}));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/', require('./routes/routes'));
 
@@ -39,8 +39,8 @@ app.use((_req, res, next) => {
 
 app.use(express.urlencoded({limit: '500kb', extended: true}));
 
-app.use('*', (_req, res, next) => {
-  return next(setError(404,'Route not found'));
+app.use('*', (_req, res) => {
+  res.status(404).send('Route not found');
 });
 
 app.disable('x-powerd-by');
