@@ -1,21 +1,31 @@
 const { default: axios } = require("axios");
-const { expect, assert } = require("chai");
 
 const app = require('../src/app');
 let server
 
-before(done => {
+beforeAll(done => {
   server = app.listen(3000, done);
 });
 
-describe("Ping Test", function () {
-  it("Ping pong", async () => {
+test("Ping Test", async() => {
     const path = 'http://localhost:3000/ping'
     const result = await axios.get(path);
-    expect(result.status).to.equal(200);
-  });
+    expect(result.status).toBe(200);
 });
 
-after(done => {
+test("Ping Test Fail", async() => {
+  const path = 'http://localhost:3000/pingg'
+  await axios.get(path).catch(err => {
+    expect(err.response.status).toBe(404)
+  });  
+});
+
+test("Ping Api Docs", async() => {
+  const path = 'http://localhost:3000/api-docs'
+  const result = await axios.get(path);
+  expect(result.status).toBe(200);
+});
+
+afterAll( done => {
   server.close(done);
 });

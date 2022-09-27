@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "mocha",
+    "test": "jest --coverage",
     "dev": "nodemon index.js",
     "swagger-autogen": "node ./swagger.js"
   },
@@ -32,6 +32,7 @@
   },
   "devDependencies": {
     "axios": "^0.27.2",
+    "jest": "^29.0.3",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.20",
     "swagger-autogen": "^2.22.0"
