@@ -17,4 +17,21 @@ const getUser = async (req, res) => {
     }
 }
 
-module.exports = getUser
+const updateProfile = async (req, res) => {
+    const { id } = req.params
+    const payload = req.body
+
+    try {
+        const profileUpdated = await UserServiceInstance
+            .updateProfile(id, payload)
+        console.log(profileUpdated)
+        return res.status(201).send(JSON.stringify(profileUpdated))
+    } catch (error) {
+        if (error.name === 'NotFoundError') {
+            return res.status(404).send(error)
+        }
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { getUser, updateProfile }
