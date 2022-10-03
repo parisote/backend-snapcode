@@ -2,6 +2,7 @@ const AuthService = require('../auth/auth.service')
 const AuthServiceInstance = new AuthService()
 
 const register = async (req, res) => {
+
     const { email, password } = req.body
 
     try {
