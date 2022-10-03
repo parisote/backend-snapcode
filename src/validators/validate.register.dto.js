@@ -1,5 +1,5 @@
 const { check } = require('express-validator')
-const { validateResult } = require('../helpers/validate.register.helper')
+const { validateResult } = require('../helpers/validate.helper')
 
 const validateRegister = [ //todo email password
     check('email')
