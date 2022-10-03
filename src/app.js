@@ -4,10 +4,10 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const userRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
+const authRouter = require('./routes/auth')
 
 
 const app = express();
-//uso este export de prisma desde los servicios para acceder a la db.
 app.set('port', process.env.PORT);
 
 app.use(express.json());
@@ -17,6 +17,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //routes
 app.use("/api/test", pingRouter);
 app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter)
 
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST');
