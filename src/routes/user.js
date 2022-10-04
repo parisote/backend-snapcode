@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUser, updateProfile } = require('../controllers/user.controller');
+const { getUser, updateProfile, followUser } = require('../controllers/user.controller');
 const { validateProfile } = require('../validators/validate.profile.dto')
 const userRouter = express.Router()
 //traer los controllers
@@ -7,6 +7,7 @@ const userRouter = express.Router()
 
 userRouter.get("/get/:id", getUser);
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
+userRouter.post("/follow/:userId/:followId", followUser)
 
 
 module.exports = userRouter
