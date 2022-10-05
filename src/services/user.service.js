@@ -14,9 +14,50 @@ class UserService {
                     id: Number(userId)
                 }
             })
+            delete result.password
             return { success: true, user: result }
         } catch (error) {
             return { success: false, user: error }
+        }
+    }
+
+    async getFollowings(userId) {
+        try {
+            const followers = await this.prisma
+                .follow.findMany({
+                    where: {
+                        followingId: Number(userId)
+                    }
+                })
+
+            followers.forEach(e => {
+                delete e.id
+                delete e.followingId
+            })
+
+            return followers
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getFollowers(userId) {
+        try {
+            const followers = await this.prisma
+                .follow.findMany({
+                    where: {
+                        followedId: Number(userId)
+                    }
+                })
+
+            followers.forEach(e => {
+                delete e.id
+                delete e.followedId
+            })
+
+            return followers
+        } catch (error) {
+            throw error
         }
     }
 
@@ -42,7 +83,7 @@ class UserService {
                 .follow.findFirst(({
                     where: {
                         followingId: Number(userId),
-                        followedById: Number(followId)
+                        followedId: Number(followId)
                     }
                 }))
             //si no encuentra el follow, lo sigue.
@@ -50,7 +91,7 @@ class UserService {
                 await this.prisma.follow.create({
                     data: {
                         followingId: Number(userId),
-                        followedById: Number(followId)
+                        followedId: Number(followId)
                     }
                 })
                 return 'user_followed'
