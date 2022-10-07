@@ -17,6 +17,28 @@ const getUser = async (req, res) => {
     }
 }
 
+const uploadPfp = async (req, res) => {
+    const { id } = req.params
+    const file = req.file
+
+    if (!id || !file) {
+        return res.status(400).send('bad_request')
+    }
+
+    try {
+        const imgPath = await UserServiceInstance.uploadPfp(id, file)
+
+        return res.status(201).send(JSON.stringify(imgPath))
+    } catch (error) {
+        if (error.name === 'NotFoundError' || error.message) {
+            return res.status(404).send('NotFoundError')
+        } else {
+            return res.status(500).send(error)
+        }
+    }
+
+}
+
 const getFollowings = async (req, res) => {
     const { id } = req.params
 
@@ -90,4 +112,4 @@ const followUser = async (req, res) => {
     }
 }
 
-module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers }
+module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp }
