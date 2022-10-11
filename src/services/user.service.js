@@ -1,9 +1,15 @@
+const sharp = require('sharp')
+const fs = require('fs')
+const util = require('util')
+const S3 = require('../../s3')
 const { PrismaClient } = require('@prisma/client')
 
 class UserService {
 
     constructor() {
         this.prisma = new PrismaClient()
+        this.unlinkFile = util.promisify(fs.unlink)
+        this.S3 = new S3()
     }
 
     async getUser(userId) {
@@ -18,6 +24,47 @@ class UserService {
             return { success: true, user: result }
         } catch (error) {
             return { success: false, user: error }
+        }
+    }
+
+    async uploadPfp(userId, file) {
+        try {
+            const profile = await this.prisma.profile.findFirst({
+                where: {
+                    userId: Number(userId)
+                }
+            })
+
+            if (!profile) {
+                await this.unlinkFile(`uploads/${file.filename}`)
+                throw new Error('NotFoundError')
+            }
+
+            await sharp(`uploads/${file.filename}`)
+                .resize(200, 200)
+                .toFile(`uploads/${file.filename}rs`)
+
+            const result = await this.S3.uploadFile(`${file.filename}rs`)
+
+            await this.unlinkFile(`uploads/${file.filename}rs`)
+            await this.unlinkFile(file.path)
+
+            await this.prisma.profile.update({
+                where: {
+                    id: Number(userId)
+                },
+                data: {
+                    pfp: result.Key,
+                }
+            })
+
+            await this.S3.removeFile(profile.pfp)
+            const imagePath = `/ avatars / ${result.Key}`
+
+            return imagePath
+
+        } catch (error) {
+            throw error
         }
     }
 
