@@ -9,7 +9,6 @@ const authRouter = require('./routes/auth')
 
 const app = express();
 app.use(cors())
-
 app.set('port', process.env.PORT);
 
 app.use(express.json());
@@ -40,6 +39,7 @@ app.use(
 );
 
 app.use(express.urlencoded({ limit: '500kb', extended: true }));/*
+*/
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //routes
