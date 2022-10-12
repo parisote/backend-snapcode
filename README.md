@@ -7,13 +7,23 @@ npm i
 ```
 
 ## Usage
+
 ```bash
 docker-compose up -d
+
+npx prisma migrate dev --name XXX
 
 npm run dev
 ```
 
-To Test
+## Doc
+
+```bash
+npm run swagger-autogen
+```
+
+## Test
+
 ```bash
 npm test
 ```

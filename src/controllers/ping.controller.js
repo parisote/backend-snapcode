@@ -1,7 +1,13 @@
-const pingCtrl = {};
+const PingService = require('../services/ping.service')
+const PingServiceInstance = new PingService()
 
-pingCtrl.ping = (req, res) => {
-    res.status(200).send('pong')
+const ping = async (req, res) => {
+    try {
+        const result = await PingServiceInstance.ping()
+        return res.status(200).send(result)
+    } catch (error) {
+        return res.status(404).send()
+    }
 }
 
-module.exports = pingCtrl;
+module.exports = ping;
