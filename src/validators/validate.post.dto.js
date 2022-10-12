@@ -3,9 +3,11 @@ const { validateResult } = require('../helpers/validate.helper')
 
 const validatePost = [
     check('value')
-        .exists(),
+        .exists()
+        .withMessage('Value is needed'),
     check('language')
-        .exists(),
+        .exists()
+        .withMessage('Value is needed'),
     check('theme')
         .exists(),
     check('options')
@@ -13,11 +15,8 @@ const validatePost = [
     check('code')
         .exists(),
     check('text')
-        .exists(),
-    check('imageUrl')
-        .exists(),
-    check('videoUrl')
-        .exists(),
+        .exists()
+        .withMessage('Value is needed'),
     check('tags')
         .exists(),
     (req, res, next) => {
