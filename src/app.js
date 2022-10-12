@@ -8,17 +8,14 @@ const authRouter = require('./routes/auth')
 
 
 const app = express();
+app.use(cors())
+
 app.set('port', process.env.PORT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-//routes
-app.use("/api/test", pingRouter);
-app.use("/api/user", userRouter);
-app.use("/api/auth", authRouter)
-
+/*
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST');
   res.header('Access-Control-Allow-Credentials', true);
@@ -42,8 +39,14 @@ app.use(
   })
 );
 
+app.use(express.urlencoded({ limit: '500kb', extended: true }));/*
 
-app.use(express.urlencoded({ limit: '500kb', extended: true }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//routes
+app.use("/api/test", pingRouter);
+app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter)
+
 
 app.use('*', (_req, res) => {
   res.status(404).send('Route not found');
