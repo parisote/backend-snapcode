@@ -5,6 +5,7 @@ const swaggerDocument = require('./swagger-output.json');
 const userRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth')
+const postRouter = require('./routes/post')
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/test", pingRouter);
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter)
+app.use("/api/post", postRouter)
 
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST');
