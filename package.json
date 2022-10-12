@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "jest",
     "test:coverage": "jest --coverage",
     "dev": "nodemon index.js",
-    "swagger-autogen": "node ./swagger.js"
+    "swagger-autogen": "node ./swagger.js",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "test": "yarn docker:up && yarn prisma migrate deploy && jest -i"
   },
   "repository": {
     "type": "git",

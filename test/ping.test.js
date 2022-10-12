@@ -8,7 +8,7 @@ beforeAll(done => {
 });
 
 test("Ping Test", async () => {
-  const path = 'http://localhost:3000/api/test'
+  const path = 'http://localhost:3000/api/ping'
   const result = await axios.get(path);
   expect(result.status).toBe(200);
 });
