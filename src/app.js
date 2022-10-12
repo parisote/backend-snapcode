@@ -3,7 +3,7 @@ const cors = require('cors')
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const userRouter = require('./routes/user');
-const leaderboardRouter = require('./routes/leaderboard')
+const postRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
 
 
@@ -18,7 +18,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //routes
 app.use("/api/test", pingRouter);
 app.use("/api/user", userRouter);
-app.use("/api/leaderboard", leaderboardRouter);
+app.use("/api/post", postRouter);
 
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST');

@@ -11,7 +11,9 @@ class LeaderboardService {
 
             const result = await this.prisma.post.findMany({                
                 orderBy: {
-                    
+                    likedBy:{
+                        _count: 'desc'
+                    }
                 }
             })
 

@@ -6,7 +6,7 @@ const getLeaderboard = async (req, res) => {
         const { post } = await LeaderboardService.getLeaderboard()
         return res.status(200).send(JSON.stringify(post))
     } catch (error) {
-        
+        return res.status(500).send()
     }
 }
 
