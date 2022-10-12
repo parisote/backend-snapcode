@@ -7,21 +7,18 @@ class PostService {
         this.prisma = new PrismaClient()
     }
 
-    async createPost(post) {
+    async createPost(post, userId) {
         try {
 
-            /*const r_code = await this.prisma.code.create({
-                data:{
-                    value: post.value,
-                    language: post.language,
-                    theme: post.theme,
-                    options: post.options,
+            const user = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: Number(userId)
                 }
-            })*/
+            })
 
+            if(!user)
+                throw new Error('NotFoundError')
 
-            console.log("before")
-            
             const result = await this.prisma.post.create({
                 data:{
                     createdAt: new Date(),
@@ -39,7 +36,7 @@ class PostService {
                     },
                     author: {
                         connect: {
-                            id: 1                        
+                            id: userId                        
                         },
                     },
                 },

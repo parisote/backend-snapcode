@@ -50,7 +50,6 @@ model Profile {
 model Post {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
   //
   code         Code?     @relation("code")
   text         String?

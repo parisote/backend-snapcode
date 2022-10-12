@@ -2,15 +2,18 @@ const PostServiceInstance = require('../services/post.service')
 const PostService = new PostServiceInstance()
 
 const createPost = async (req, res) => {
+    const { id } = req.params
+    const body = req.body
 
-    let body = req.body
+    if(!id)
+        return res.status(500).send("Id not found")
 
-    if (!body) {
-        return res.status(500).send()
-    }
+
+    if (!body)
+        return res.status(500).send("Body not found")
 
     try {
-        const result = await PostService.createPost(body)
+        const result = await PostService.createPost(body,id)
 
         if(!result.success)
             return res.status(500).send(JSON.stringify(result))        
