@@ -24,26 +24,26 @@ class PostService {
             
             const result = await this.prisma.post.create({
                 data:{
-                    createdAt: Date.now(),
-                    updatedAt: Date.now(),
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
                     text: post.text,
-                    imageUrl: post.imageUrl,
+                    imgageUrl: post.imageUrl,
                     videoUrl: post.videoUrl,
                     tags: post.tags,
                     code: {
-                        create:[
+                        create:
                             {
                                 value: post.value,
                                 language: post.language,
-                                theme: post.theme,
-                                options: post.options,
-                            }
-                        ] 
-                    }
+                            },
+                    },
+                    author: {
+                        connect: {
+                            id: 1                        
+                        },
+                    },
                 },
             })
-
-            console.log("RESULT1 ", result)
 
             return { success: true, post: result }
         } catch (error) {
@@ -52,12 +52,25 @@ class PostService {
     }
 
     async getAllPost(){
-    try{
-        const result = await this.prisma.post.findMany()
-        return { success: true, post: result }
-    } catch (error) {
-        return { success: false, post: error }
+        try{
+            const result = await this.prisma.post.findMany()
+            return { success: true, post: result }
+        } catch (error) {
+            return { success: false, post: error }
+        }
     }
+
+    async getById(postId){
+        try{
+            const result = await this.prisma.post.findUniqueOrThrow({
+                where: {
+                    id: Number(postId)
+                }
+            })
+            return { success: true, post: result }
+        } catch (error) {
+            return { success: false, post: error }
+        }
     }
 }
 

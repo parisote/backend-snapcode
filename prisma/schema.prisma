@@ -54,7 +54,7 @@ model Post {
   //
   code         Code?     @relation("code")
   text         String?
-  imgageUrl    String?
+  imageUrl    String?
   videoUrl     String?
   tags         String?
   commentaries Comment[]

@@ -10,10 +10,14 @@ const createPost = async (req, res) => {
     }
 
     try {
-        const { post } = await PostService.createPost(body)
-        return res.status(200).send(JSON.stringify(post))
+        const result = await PostService.createPost(body)
+
+        if(!result.success)
+            return res.status(500).send(JSON.stringify(result))        
+
+        return res.status(200).send(JSON.stringify(result.post))
     } catch (error) {
-        return res.status(404).send('User not found')
+        return res.status(500).send('Error post create')
     }
 }
 
@@ -22,8 +26,23 @@ const getAll = async (req, res) => {
         const result = await PostService.getAllPost()
         return res.status(200).send(JSON.stringify(result))
     } catch (error) {
-        return res.status(404).send('User not found')
+        return res.status(500).send('Error with post search')
     }
 }
 
-module.exports = { createPost, getAll }
+const getById = async (req, res) => {
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send()
+        }
+
+        const result = await PostService.getById(id)
+        return res.status(200).send(JSON.stringify(result))
+    } catch (error) {
+        return res.status(404).send('Post not found')
+    }
+}
+
+module.exports = { createPost, getAll, getById }
