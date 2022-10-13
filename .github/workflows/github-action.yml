@@ -19,6 +19,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - run: npm run build --if-present
-    - run: npm docker:up
+    - run: npm run docker:up
     - run: npm test
-    - run: npm docker:down
+    - run: npm run docker:down
