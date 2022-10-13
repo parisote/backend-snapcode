@@ -11,9 +11,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Docker
-        run: docker-compose up -d
-
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
@@ -22,5 +19,6 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - run: npm run build --if-present
+    - run: npm docker:up
     - run: npm test
     - run: npm docker:down
