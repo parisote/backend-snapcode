@@ -1,5 +1,5 @@
 const express = require('express')
-const { register, login } = require('../auth/auth.controller')
+const { register, login } = require('../controllers/auth.controller')
 const { validateRegister } = require('../validators/validate.register.dto')
 const authRouter = express.Router()
 //traer los controllers

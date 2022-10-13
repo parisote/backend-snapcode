@@ -1,6 +1,10 @@
 const express = require('express')
 const postRouter = express.Router()
-//traer los controllers
-//a futuro hay que traer el middleware de authorization y de multer (file management)
+const { createPost, getAll, getById } = require('../controllers/post.controller');
+const { validatePost } = require('../validators/validate.post.dto');
+
+postRouter.get("/", getAll)
+postRouter.get("/:id", getById)
+postRouter.post("/:id", validatePost, createPost)
 
 module.exports = postRouter

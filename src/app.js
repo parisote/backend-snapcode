@@ -5,6 +5,7 @@ const swaggerDocument = require('./swagger-output.json');
 const userRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth')
+const postRouter = require('./routes/post')
 
 
 const app = express();
@@ -43,9 +44,10 @@ app.use(express.urlencoded({ limit: '500kb', extended: true }));/*
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //routes
-app.use("/api/test", pingRouter);
+app.use("/api/ping", pingRouter);
 app.use("/api/user", userRouter);
-app.use("/api/auth", authRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
 
 
 app.use('*', (_req, res) => {
