@@ -10,7 +10,8 @@
     "swagger-autogen": "node ./swagger.js",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "test": "yarn docker:up && yarn prisma migrate deploy && jest -i"
+    "test:locate": "yarn docker:up && yarn prisma migrate deploy && jest -i",
+    "test": "yarn prisma migrate deploy && jest -i"
   },
   "repository": {
     "type": "git",
