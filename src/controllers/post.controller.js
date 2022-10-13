@@ -6,11 +6,11 @@ const createPost = async (req, res) => {
     const body = req.body
 
     if(!id)
-        return res.status(500).send("Id not found")
+        return res.status(404).send("Id not found")
 
 
     if (!body)
-        return res.status(500).send("Body not found")
+        return res.status(404).send("Body not found")
 
     try {
         const result = await PostService.createPost(body,id)
