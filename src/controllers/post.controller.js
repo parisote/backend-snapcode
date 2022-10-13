@@ -14,8 +14,6 @@ const createPost = async (req, res) => {
 
     try {
         const result = await PostService.createPost(body,id)
-
-        console.log(result)
         
         if(!result.success)
             return res.status(500).send(JSON.stringify(result))        

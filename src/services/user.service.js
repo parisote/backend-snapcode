@@ -151,7 +151,6 @@ class UserService {
             })
             return 'user_unfollowed'
         } catch (error) {
-            console.log(error)
             throw error
         }
     }
