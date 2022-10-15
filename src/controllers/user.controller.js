@@ -48,7 +48,6 @@ const getFollowings = async (req, res) => {
 
     try {
         const data = await UserServiceInstance.getFollowings(id)
-        console.log(data)
         return res.status(200).send(JSON.stringify(data))
     } catch (error) {
         return res.status(404).send('User not found')
@@ -64,7 +63,7 @@ const getFollowers = async (req, res) => {
 
     try {
         const data = await UserServiceInstance.getFollowers(id)
-        console.log(data)
+
         return res.status(200).send(JSON.stringify(data))
     } catch (error) {
         return res.status(404).send('User not found')
