@@ -8,4 +8,5 @@ RUN npm config set unsafe-perm true
 RUN npm install --production
 COPY . .
 EXPOSE 4000
+RUN npx prisma generate
 CMD ["npm", "run", "start"]
