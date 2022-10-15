@@ -1,5 +1,7 @@
 FROM node:18
+ARG DATABASE_URL
 ENV NODE_ENV production
+ENV DATABASE_URL ${DATABASE_URL}
 
 WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
