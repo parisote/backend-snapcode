@@ -17,14 +17,13 @@ class PostService {
             })
 
             if(!user)
-                throw new Error('NotFoundError')
+                return {success: false, post: 'User not found' }
 
             const result = await this.prisma.post.create({
                 data:{
                     createdAt: new Date(),
-                    updatedAt: new Date(),
                     text: post.text,
-                    imgageUrl: post.imageUrl,
+                    imageUrl: post.imageUrl,
                     videoUrl: post.videoUrl,
                     tags: post.tags,
                     code: {
@@ -36,7 +35,7 @@ class PostService {
                     },
                     author: {
                         connect: {
-                            id: userId                        
+                            id: Number(userId)                        
                         },
                     },
                 },
