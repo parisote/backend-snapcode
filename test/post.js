@@ -5,12 +5,9 @@ let post_id = 0;
 describe("Post test",() => {
   it("Post Create OK", async () => {
       const body = {
-          value: "asd1",
           language: "asd2",
-          theme: "asd3",
-          options: "asd4",
           code: "asd5",
-          text: "asd6",
+          title: "asd6",
           imageUrl: "asd7",
           videoUrl: "asd8",
           tags: "java9"
