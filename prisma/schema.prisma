@@ -19,16 +19,16 @@ model User {
   comments      Comment[] @relation("commentAuthor")
   likedComments Comment[] @relation("likedComments")
   following     Follow[]  @relation("following")
-  followedBy    Follow[]  @relation("followedBy")
+  followedBy    Follow[]  @relation("followed")
 }
 
 model Follow {
-  id           Int  @id @default(autoincrement())
+  id          Int  @id @default(autoincrement())
   //relations
-  following    User @relation("following", fields: [followingId], references: [id])
-  follow       User @relation("followedBy", fields: [followedById], references: [id])
-  followingId  Int
-  followedById Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followed    User @relation("followed", fields: [followedId], references: [id])
+  followingId Int
+  followedId  Int
 }
 
 model Profile {
@@ -50,11 +50,10 @@ model Profile {
 model Post {
   id           Int       @id @default(autoincrement())
   createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
   //
   code         Code?     @relation("code")
   text         String?
-  imgageUrl    String?
+  imageUrl    String?
   videoUrl     String?
   tags         String?
   commentaries Comment[]
