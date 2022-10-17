@@ -70,6 +70,21 @@ const getFollowers = async (req, res) => {
     }
 }
 
+const getProfile = async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const profile = await UserServiceInstance.getProfile(id)
+        return res.status(200).send(JSON.stringify(profile))
+    } catch (error) {
+        if (error.name === 'NotFoundError') {
+            return res.status(404).send(error)
+        }
+
+        return res.status(500).send(error)
+    }
+}
+
 const updateProfile = async (req, res) => {
     const { id } = req.params
     const payload = req.body
@@ -111,4 +126,4 @@ const followUser = async (req, res) => {
     }
 }
 
-module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp }
+module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile }
