@@ -3,30 +3,35 @@ const cors = require('cors')
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 const userRouter = require('./routes/user');
-const postRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
+const authRouter = require('./routes/auth')
+const postRouter = require('./routes/post')
+const chalk = require('chalk')
+const log = require('loglevel')
+const prefix = require('loglevel-plugin-prefix');
 
+const colors = {
+  TRACE: chalk.magenta,
+  DEBUG: chalk.cyan,
+  INFO: chalk.blue,
+  WARN: chalk.yellow,
+  ERROR: chalk.red,
+};
 
 const app = express();
-//uso este export de prisma desde los servicios para acceder a la db.
+app.use(cors())
 app.set('port', process.env.PORT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-//routes
-app.use("/api/test", pingRouter);
-app.use("/api/user", userRouter);
-app.use("/api/post", postRouter);
-
+/*
 app.use((_req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,POST');
   res.header('Access-Control-Allow-Credentials', true);
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
-
 var allowedOrigins = ['http://localhost:4000'];
 app.use(
   cors({
@@ -42,13 +47,36 @@ app.use(
     credentials: true
   })
 );
+app.use(express.urlencoded({ limit: '500kb', extended: true }));/*
+*/
 
-
-app.use(express.urlencoded({ limit: '500kb', extended: true }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//routes
+app.use("/api/ping", pingRouter);
+app.use("/api/user", userRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/post", postRouter);
 
 app.use('*', (_req, res) => {
   res.status(404).send('Route not found');
 });
+
+//LOG//
+prefix.reg(log);
+log.enableAll();
+
+prefix.apply(log, {
+  format(level, name, timestamp) {
+    return `${chalk.gray(`[${timestamp}]`)} ${colors[level.toUpperCase()](level)} ${chalk.green(`${name}:`)}`;
+  },
+});
+
+prefix.apply(log.getLogger('critical'), {
+  format(level, name, timestamp) {
+    return chalk.red.bold(`[${timestamp}] ${level} ${name}:`);
+  },
+});
+//LOG//
 
 app.disable('x-powerd-by');
 
