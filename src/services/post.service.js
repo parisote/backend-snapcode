@@ -22,14 +22,14 @@ class PostService {
             const result = await this.prisma.post.create({
                 data:{
                     createdAt: new Date(),
-                    text: post.text,
-                    imageUrl: post.imageUrl,
-                    videoUrl: post.videoUrl,
+                    text: post.title,
+                    imageUrl: post.imageUrl ? post.imageUrl : null,
+                    videoUrl: post.videoUrl ? post.imageUrl : null,
                     tags: post.tags,
                     code: {
                         create:
                             {
-                                value: post.value,
+                                value: post.code,
                                 language: post.language,
                             },
                     },
