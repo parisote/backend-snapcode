@@ -155,6 +155,20 @@ class UserService {
         }
     }
 
+    async getProfile(userId) {
+        try {
+            const profile = await this.prisma.profile
+                .findFirstOrThrow({
+                    where: {
+                        userId: Number(userId)
+                    }
+                })
+            return profile
+        } catch (error) {
+            throw error
+        }
+    }
+
     async updateProfile(userId, payload) {
 
         const { name, username, pfp, biography,

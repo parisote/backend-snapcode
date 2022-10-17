@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUser, updateProfile, followUser, getFollowings, getFollowers, uploadPfp } = require('../controllers/user.controller');
+const { getUser, updateProfile, followUser, getFollowings, getFollowers, uploadPfp, getProfile } = require('../controllers/user.controller');
 const { validateProfile } = require('../validators/validate.profile.dto')
 const multer = require('multer')
 
@@ -11,6 +11,7 @@ const userRouter = express.Router()
 userRouter.get("/:id", getUser);
 userRouter.get("/following/:id", getFollowings)
 userRouter.get("/followers/:id", getFollowers)
+userRouter.get("/profile/:id", getProfile)
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
