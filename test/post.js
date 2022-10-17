@@ -8,9 +8,8 @@ describe("Post test",() => {
           language: "asd2",
           code: "asd5",
           title: "asd6",
-          imageUrl: "asd7",
-          videoUrl: "asd8",
-          tags: "java9"
+          tags: "java9",
+          fileName: "asd"
         }
 
       const path = 'http://localhost:3000/api/post/1'
