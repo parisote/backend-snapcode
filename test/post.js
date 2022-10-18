@@ -5,15 +5,11 @@ let post_id = 0;
 describe("Post test",() => {
   it("Post Create OK", async () => {
       const body = {
-          value: "asd1",
           language: "asd2",
-          theme: "asd3",
-          options: "asd4",
           code: "asd5",
-          text: "asd6",
-          imageUrl: "asd7",
-          videoUrl: "asd8",
-          tags: "java9"
+          title: "asd6",
+          tags: "java9",
+          fileName: "asd"
         }
 
       const path = 'http://localhost:3000/api/post/1'
@@ -22,11 +18,17 @@ describe("Post test",() => {
       expect(result.status).toBe(201);
   });
 
-  it("Get Post OK", async () => {
+  it("Get Post by ID OK", async () => {
       const path = 'http://localhost:3000/api/post/'+post_id
       const result = await axios.get(path);
       expect(result.status).toBe(200);
   });
+
+  it("Get Post by USER OK", async () => {
+    const path = 'http://localhost:3000/api/post/user/1'
+    const result = await axios.get(path);
+    expect(result.status).toBe(200);
+});
 
   it("Get All Post OK", async () => {
       const path = 'http://localhost:3000/api/post'
