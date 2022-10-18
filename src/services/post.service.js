@@ -61,7 +61,9 @@ class PostService {
             const result = await this.prisma.post.findUniqueOrThrow({
                 where: {
                     id: Number(postId)
-                }
+                }, include: {
+                    code: true,
+                  }
             })
             return { success: true, post: result }
         } catch (error) {
@@ -74,7 +76,9 @@ class PostService {
             const result = await this.prisma.post.findMany({
                 where: {
                     authorId: Number(userId)
-                }
+                }, include: {
+                    code: true,
+                  }
             })
             return { success: true, post: result }
         } catch (error) {
