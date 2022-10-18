@@ -1,4 +1,4 @@
-const AuthService = require('../auth/auth.service')
+const AuthService = require('../services/auth.service')
 const AuthServiceInstance = new AuthService()
 const { setMessage, setError, setTrace } = require('../utils/log')
 
