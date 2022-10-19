@@ -67,4 +67,25 @@ const getById = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAll, getById }
+const getByUserId = async (req, res) => {
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send()
+        }
+
+        const result = await PostService.getByUserId(id)
+
+        if(!result.success)
+            throw error
+
+        setMessage(200, JSON.stringify(result))
+        return res.status(200).send(JSON.stringify(result))
+    } catch (error) {
+        setTrace(500, error)
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { createPost, getAll, getById, getByUserId }
