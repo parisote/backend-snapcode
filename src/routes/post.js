@@ -5,8 +5,8 @@ const { validatePost } = require('../validators/validate.post.dto');
 const { authenticateToken } = require('../helpers/verify.helper')
 
 postRouter.get("/", authenticateToken, getAll)
-postRouter.get("/:id", getById)
-postRouter.get("/user/:id", getByUserId)
-postRouter.post("/:id", validatePost, createPost)
+postRouter.get("/:id", authenticateToken, getById)
+postRouter.get("/user/:id", authenticateToken, getByUserId)
+postRouter.post("/:id", validatePost, authenticateToken, createPost)
 
 module.exports = postRouter

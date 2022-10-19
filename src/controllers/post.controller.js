@@ -32,6 +32,9 @@ const createPost = async (req, res) => {
 }
 
 const getAll = async (req, res) => {
+    /* #swagger.security = [{
+            "bearerAuth": []
+    }] */
     try{
         const result = await PostService.getAllPost()
 
