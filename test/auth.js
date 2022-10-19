@@ -27,7 +27,7 @@ describe("Auth test",() => {
         });
   })
 
-  it("Login USER", async () => {
+  it("Login USER OK", async () => {
     const body = { email: "test@test.com", password: "123" }
 
     const path = 'http://localhost:3000/api/auth/login'
