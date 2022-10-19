@@ -200,7 +200,8 @@ class UserService {
                             workingAt: workingAt,
                             location: location,
                             linkedIn: linkedIn,
-                            twitter: twitter
+                            twitter: twitter,
+                            pfp: '11c3a07db76d29cdf6238c9eef528ccfrs'
                         }
                     })
                 return newProfile
