@@ -7,7 +7,6 @@ services:
     environment:
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_USER: root
-      JWT_SECRET: secret
     logging:
       options:
         max-size: 10m
