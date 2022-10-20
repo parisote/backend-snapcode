@@ -2,19 +2,15 @@ const { check } = require('express-validator')
 const { validateResult } = require('../helpers/validate.helper')
 
 const validatePost = [
-    check('value')
+    check('title')
+        .exists(),
+    check('code')
         .exists()
-        .withMessage('Value is needed'),
+        .withMessage('Code is needed'),
     check('language')
         .exists()
         .withMessage('Value is needed'),
-    check('theme')
-        .exists(),
-    check('options')
-        .exists(),
-    check('code')
-        .exists(),
-    check('text')
+    check('fileName')
         .exists()
         .withMessage('Value is needed'),
     check('tags')

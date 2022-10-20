@@ -1,4 +1,4 @@
-const AuthService = require('../auth/auth.service')
+const AuthService = require('../services/auth.service')
 const AuthServiceInstance = new AuthService()
 const { setMessage, setError, setTrace } = require('../utils/log')
 
@@ -7,9 +7,9 @@ const register = async (req, res) => {
     const { email, password } = req.body
 
     try {
-        await AuthServiceInstance.register(email, password)
-        setMessage(201, 'User created.')
-        return res.status(201).send({ message: 'User created.' })
+        const user = await AuthServiceInstance.register(email, password)
+        setMessage(201, JSON.stringify(user))
+        return res.status(201).send(JSON.stringify(user))
     } catch (error) {
         if (error.message === 'user_exists') {
             setError(400,'user_exists')
