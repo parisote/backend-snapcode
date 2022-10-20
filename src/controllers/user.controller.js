@@ -18,6 +18,29 @@ const getUser = async (req, res) => {
 }
 
 const uploadPfp = async (req, res) => {
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "multipart/form-data": {
+                schema: {
+                type: "object",
+                properties: {
+                  image: {
+                    type: "string",
+                    format: "binary",
+                    nullable: true
+                  }
+                }
+              },
+              encoding: {
+                file: {
+                  style: "form"
+                }
+              }
+            }
+        } 
+    }
+    */
     const { id } = req.params
     const file = req.file
 
