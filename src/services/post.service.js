@@ -85,6 +85,21 @@ class PostService {
             return { success: false, post: error }
         }
     }
+
+    async getLikedPostsByUserId(userId){
+        try{
+            const result = await this.prisma.user.findMany({
+                where: {
+                    id: Number(userId)
+                }, select: {
+                    likedPosts: true,
+                  }
+            })
+            return { success: true, post: result }
+        } catch (error) {            
+            return { success: false, post: error }
+        }
+    }
 }
 
 module.exports = PostService
