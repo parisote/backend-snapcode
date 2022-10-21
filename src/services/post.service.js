@@ -49,7 +49,12 @@ class PostService {
 
     async getAllPost(){
         try{
-            const result = await this.prisma.post.findMany()
+            const result = await this.prisma.post.findMany({
+                include:{
+                    commentaries: true,
+                    likedBy: true
+                }
+            })
             return { success: true, post: result }
         } catch (error) {
             return { success: false, post: error }
@@ -63,6 +68,8 @@ class PostService {
                     id: Number(postId)
                 }, include: {
                     code: true,
+                    commentaries: true,
+                    likedBy: true
                   }
             })
             return { success: true, post: result }
