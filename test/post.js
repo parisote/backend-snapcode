@@ -36,6 +36,12 @@ describe("Post test",() => {
       expect(result.status).toBe(200);
   });
 
+  it("Get Liked Posts by UserID OK", async () => {
+    const path = 'http://localhost:3000/api/post/user/liked/1'
+    const result = await axios.get(path);
+    expect(result.status).toBe(200);
+});
+
   it("Create Post FAIL", async () => {
       const body = {
           language: "asd2",
