@@ -17,26 +17,25 @@ class PostService {
             })
 
             if(!user)
-                throw new Error('NotFoundError')
+                return {success: false, post: 'User not found' }
 
             const result = await this.prisma.post.create({
                 data:{
                     createdAt: new Date(),
-                    updatedAt: new Date(),
-                    text: post.text,
-                    imgageUrl: post.imageUrl,
-                    videoUrl: post.videoUrl,
+                    text: post.title,
+                    imageUrl: post.imageUrl ? post.imageUrl : null,
+                    videoUrl: post.videoUrl ? post.imageUrl : null,
                     tags: post.tags,
                     code: {
                         create:
                             {
-                                value: post.value,
+                                value: post.code,
                                 language: post.language,
                             },
                     },
                     author: {
                         connect: {
-                            id: userId                        
+                            id: Number(userId)                        
                         },
                     },
                 },
@@ -62,7 +61,24 @@ class PostService {
             const result = await this.prisma.post.findUniqueOrThrow({
                 where: {
                     id: Number(postId)
-                }
+                }, include: {
+                    code: true,
+                  }
+            })
+            return { success: true, post: result }
+        } catch (error) {
+            return { success: false, post: error }
+        }
+    }
+
+    async getByUserId(userId){
+        try{
+            const result = await this.prisma.post.findMany({
+                where: {
+                    authorId: Number(userId)
+                }, include: {
+                    code: true,
+                  }
             })
             return { success: true, post: result }
         } catch (error) {

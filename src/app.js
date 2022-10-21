@@ -6,7 +6,17 @@ const userRouter = require('./routes/user');
 const pingRouter = require('./routes/ping');
 const authRouter = require('./routes/auth')
 const postRouter = require('./routes/post')
+const chalk = require('chalk')
+const log = require('loglevel')
+const prefix = require('loglevel-plugin-prefix');
 
+const colors = {
+  TRACE: chalk.magenta,
+  DEBUG: chalk.cyan,
+  INFO: chalk.blue,
+  WARN: chalk.yellow,
+  ERROR: chalk.red,
+};
 
 const app = express();
 app.use(cors())
@@ -49,10 +59,26 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 
-
 app.use('*', (_req, res) => {
   res.status(404).send('Route not found');
 });
+
+//LOG//
+prefix.reg(log);
+log.enableAll();
+
+prefix.apply(log, {
+  format(level, name, timestamp) {
+    return `${chalk.gray(`[${timestamp}]`)} ${colors[level.toUpperCase()](level)} ${chalk.green(`${name}:`)}`;
+  },
+});
+
+prefix.apply(log.getLogger('critical'), {
+  format(level, name, timestamp) {
+    return chalk.red.bold(`[${timestamp}] ${level} ${name}:`);
+  },
+});
+//LOG//
 
 app.disable('x-powerd-by');
 
