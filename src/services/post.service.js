@@ -16,11 +16,11 @@ class PostService {
                 }
             })
 
-            if(!user)
-                return {success: false, post: 'User not found' }
+            if (!user)
+                return { success: false, post: 'User not found' }
 
             const result = await this.prisma.post.create({
-                data:{
+                data: {
                     createdAt: new Date(),
                     text: post.title,
                     imageUrl: post.imageUrl ? post.imageUrl : null,
@@ -28,14 +28,14 @@ class PostService {
                     tags: post.tags,
                     code: {
                         create:
-                            {
-                                value: post.code,
-                                language: post.language,
-                            },
+                        {
+                            value: post.code,
+                            language: post.language,
+                        },
                     },
                     author: {
                         connect: {
-                            id: Number(userId)                        
+                            id: Number(userId)
                         },
                     },
                 },
@@ -47,10 +47,10 @@ class PostService {
         }
     }
 
-    async getAllPost(){
-        try{
+    async getAllPost() {
+        try {
             const result = await this.prisma.post.findMany({
-                include:{
+                include: {
                     commentaries: true,
                     likedBy: true
                 }
@@ -61,8 +61,8 @@ class PostService {
         }
     }
 
-    async getById(postId){
-        try{
+    async getById(postId) {
+        try {
             const result = await this.prisma.post.findUniqueOrThrow({
                 where: {
                     id: Number(postId)
@@ -70,7 +70,7 @@ class PostService {
                     code: true,
                     commentaries: true,
                     likedBy: true
-                  }
+                }
             })
             return { success: true, post: result }
         } catch (error) {
@@ -78,14 +78,16 @@ class PostService {
         }
     }
 
-    async getByUserId(userId){
-        try{
+    async getByUserId(userId) {
+        try {
             const result = await this.prisma.post.findMany({
                 where: {
                     authorId: Number(userId)
                 }, include: {
                     code: true,
-                  }
+                    likedBy: true,
+                    commentaries: true,
+                }
             })
             return { success: true, post: result }
         } catch (error) {
@@ -93,17 +95,23 @@ class PostService {
         }
     }
 
-    async getLikedPostsByUserId(userId){
-        try{
+    async getLikedPostsByUserId(userId) {
+        try {
             const result = await this.prisma.user.findMany({
                 where: {
                     id: Number(userId)
                 }, select: {
-                    likedPosts: true,
-                  }
+                    likedPosts: {
+                        include: {
+                            code: true,
+                            likedBy: true,
+                            commentaries: true
+                        }
+                    }
+                }
             })
             return { success: true, post: result }
-        } catch (error) {            
+        } catch (error) {
             return { success: false, post: error }
         }
     }
