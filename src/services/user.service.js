@@ -51,7 +51,7 @@ class UserService {
 
             await this.prisma.profile.update({
                 where: {
-                    id: Number(userId)
+                    userId: Number(userId)
                 },
                 data: {
                     pfp: result.Key,
