@@ -12,7 +12,7 @@ const getUser = async (req, res) => {
 
     try {
         const user = await UserServiceInstance.getUser(id)
-        return res.status(200).send(JSON.stringify(user))
+        return res.status(200).send(user)
     } catch (error) {
         return res.status(404).send('User not found')
     }
@@ -32,7 +32,7 @@ const uploadPfp = async (req, res) => {
     try {
         const imgPath = await UserServiceInstance.uploadPfp(id, file)
 
-        return res.status(201).send(JSON.stringify(imgPath))
+        return res.status(201).send(imgPath)
     } catch (error) {
         if (error.name === 'NotFoundError' || error.message) {
             return res.status(404).send('NotFoundError')
@@ -40,7 +40,6 @@ const uploadPfp = async (req, res) => {
             return res.status(500).send(error)
         }
     }
-
 }
 
 const getFollowings = async (req, res) => {
@@ -51,7 +50,7 @@ const getFollowings = async (req, res) => {
 
     try {
         const data = await UserServiceInstance.getFollowings(id)
-        return res.status(200).send(JSON.stringify(data))
+        return res.status(200).send(data)
     } catch (error) {
         return res.status(404).send('User not found')
     }
@@ -66,7 +65,7 @@ const getFollowers = async (req, res) => {
     try {
         const data = await UserServiceInstance.getFollowers(id)
 
-        return res.status(200).send(JSON.stringify(data))
+        return res.status(200).send(data)
     } catch (error) {
         return res.status(404).send('User not found')
     }
@@ -80,7 +79,7 @@ const getProfile = async (req, res) => {
 
     try {
         const profile = await UserServiceInstance.getProfile(id)
-        return res.status(200).send(JSON.stringify(profile))
+        return res.status(200).send(profile)
     } catch (error) {
         if (error.name === 'NotFoundError') {
             return res.status(404).send(error)
@@ -102,7 +101,7 @@ const updateProfile = async (req, res) => {
         const profileUpdated = await UserServiceInstance
             .updateProfile(id, payload)
 
-        return res.status(201).send(JSON.stringify(profileUpdated))
+        return res.status(201).send(profileUpdated)
 
     } catch (error) {
 
@@ -112,7 +111,6 @@ const updateProfile = async (req, res) => {
 
         return res.status(500).send(error)
     }
-
 }
 
 const followUser = async (req, res) => {
@@ -155,7 +153,7 @@ const likeOrDislikePost = async (req, res) => {
         const result = await UserServiceInstance.likeOrDislikePost(id, postId)
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
+        return res.status(200).send(result)
 
     } catch (error) {
         if (error.message == 'User is not exists' || error.message == 'Post is not exists') {

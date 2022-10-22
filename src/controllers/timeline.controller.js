@@ -11,7 +11,7 @@ const getUserTimeline = async (req, res) => {
 
     try {
         const post = await TimelineServiceInstance.getUserTimeline(id)
-        return res.status(200).send(JSON.stringify(post))
+        return res.status(200).send(post)
     } catch (error) {
         return res.status(500).send()
     }
