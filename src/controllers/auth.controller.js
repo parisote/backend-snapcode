@@ -9,7 +9,7 @@ const register = async (req, res) => {
     try {
         const user = await AuthServiceInstance.register(email, password)
         setMessage(201, JSON.stringify(user))
-        return res.status(201).send(JSON.stringify(user))
+        return res.status(201).send(user)
     } catch (error) {
         if (error.message === 'user_exists') {
             setError(400,'user_exists')
@@ -28,7 +28,7 @@ const login = async (req, res) => {
     try {
         const loginData = await AuthServiceInstance.login(email, password)
         setMessage(200, loginData)
-        return res.status(200).send(JSON.stringify(loginData))
+        return res.status(200).send(loginData)
     } catch (error) {
         if (error.message === 'wrong_password' || error.message === 'user_not_found') {
             setError(403, error.message)

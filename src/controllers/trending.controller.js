@@ -7,7 +7,7 @@ const getTrending = async (req, res) => {
     }] */
     try {
         const leader  = await TrendingServiceInstance.getTrending()
-        return res.status(200).send(JSON.stringify(leader))
+        return res.status(200).send(leader)
     } catch (error) {
         console.log(error)
         return res.status(500).send()

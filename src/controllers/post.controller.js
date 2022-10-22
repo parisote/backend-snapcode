@@ -23,7 +23,7 @@ const createPost = async (req, res) => {
         const post = await PostService.createPost(body,id)
 
         setMessage(201, JSON.stringify(post))
-        return res.status(201).send(JSON.stringify(post))
+        return res.status(201).send(post)
 
     } catch (error) {
         setTrace(500, error)
@@ -39,7 +39,7 @@ const getAll = async (req, res) => {
         const result = await PostService.getAllPost()
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
+        return res.status(200).send(result)
 
     } catch (error) {
         setTrace(500, error)
@@ -62,7 +62,7 @@ const getById = async (req, res) => {
         const result = await PostService.getById(id)
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
+        return res.status(200).send(result)
     } catch (error) {
         setTrace(500, error)
         return res.status(500).send(error)
@@ -83,7 +83,7 @@ const getByUserId = async (req, res) => {
         const result = await PostService.getByUserId(id)
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
+        return res.status(200).send(result)
     } catch (error) {
         setTrace(500, error)
         return res.status(500).send(error)
@@ -103,7 +103,7 @@ const getLikedPostsByUserId = async (req, res) => {
         const result = await PostService.getLikedPostsByUserId(id)
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(result.post)
+        return res.status(200).send(result)
     } catch (error) {
         setTrace(500, error)
         return res.status(500).send(error)
