@@ -3,6 +3,9 @@ const PostService = new PostServiceInstance()
 const { setMessage, setError, setTrace } = require('../utils/log')
 
 const createPost = async (req, res) => {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
     const { id } = req.params
     const body = req.body
 
@@ -17,13 +20,10 @@ const createPost = async (req, res) => {
     }
 
     try {
-        const result = await PostService.createPost(body, id)
+        const post = await PostService.createPost(body,id)
 
-        if (!result.success)
-            throw result.post
-
-        setMessage(201, JSON.stringify(result.post))
-        return res.status(201).send(JSON.stringify(result.post))
+        setMessage(201, JSON.stringify(post))
+        return res.status(201).send(JSON.stringify(post))
 
     } catch (error) {
         setTrace(500, error)
@@ -38,11 +38,9 @@ const getAll = async (req, res) => {
     try {
         const result = await PostService.getAllPost()
 
-        if (!result.success)
-            throw error
-
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(JSON.stringify(result))
+
     } catch (error) {
         setTrace(500, error)
         return res.status(500).send('Error with post search')
@@ -50,7 +48,11 @@ const getAll = async (req, res) => {
 }
 
 const getById = async (req, res) => {
-    try {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
+    try{
+
         const { id } = req.params
 
         if (!id) {
@@ -58,9 +60,6 @@ const getById = async (req, res) => {
         }
 
         const result = await PostService.getById(id)
-
-        if (!result.success)
-            throw error
 
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(JSON.stringify(result))
@@ -71,7 +70,10 @@ const getById = async (req, res) => {
 }
 
 const getByUserId = async (req, res) => {
-    try {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
+    try{
         const { id } = req.params
 
         if (!id) {
@@ -79,9 +81,6 @@ const getByUserId = async (req, res) => {
         }
 
         const result = await PostService.getByUserId(id)
-
-        if (!result.success)
-            throw error
 
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(JSON.stringify(result))
@@ -92,17 +91,16 @@ const getByUserId = async (req, res) => {
 }
 
 const getLikedPostsByUserId = async (req, res) => {
-    try {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
+    try{
         const { id } = req.params
 
-        if (!id) {
-            return res.status(400).send("ID cannot be null.")
-        }
+        if (!id) 
+            return res.status(400).send("ID cannot be null.")        
 
         const result = await PostService.getLikedPostsByUserId(id)
-
-        if (!result.success)
-            throw error
 
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(result.post)

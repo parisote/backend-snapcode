@@ -11,7 +11,7 @@ const getUser = async (req, res) => {
     }
 
     try {
-        const { user } = await UserServiceInstance.getUser(id)
+        const user = await UserServiceInstance.getUser(id)
         return res.status(200).send(JSON.stringify(user))
     } catch (error) {
         return res.status(404).send('User not found')
@@ -22,12 +22,12 @@ const uploadPfp = async (req, res) => {
     const { id } = req.params
     const file = req.file
 
-    if (!id) 
+    if (!id)
         return res.status(400).send('User ID cannot be null')
 
-    if(!file)
+    if (!file)
         return res.status(400).send('File cannot be null')
-    
+
 
     try {
         const imgPath = await UserServiceInstance.uploadPfp(id, file)
@@ -37,7 +37,7 @@ const uploadPfp = async (req, res) => {
         if (error.name === 'NotFoundError' || error.message) {
             return res.status(404).send('NotFoundError')
         } else {
-            return res.status(500).send('error')
+            return res.status(500).send(error)
         }
     }
 
@@ -46,8 +46,8 @@ const uploadPfp = async (req, res) => {
 const getFollowings = async (req, res) => {
     const { id } = req.params
 
-    if (!id) 
-        return res.status(400).send('User ID cannot be null')    
+    if (!id)
+        return res.status(400).send('User ID cannot be null')
 
     try {
         const data = await UserServiceInstance.getFollowings(id)
@@ -60,7 +60,7 @@ const getFollowings = async (req, res) => {
 const getFollowers = async (req, res) => {
     const { id } = req.params
 
-    if (!id) 
+    if (!id)
         return res.status(400).send('User ID cannot be null')
 
     try {
@@ -75,7 +75,7 @@ const getFollowers = async (req, res) => {
 const getProfile = async (req, res) => {
     const { id } = req.params
 
-    if(!id)
+    if (!id)
         return res.status(400).send('User ID cannot be null')
 
     try {
@@ -94,7 +94,7 @@ const updateProfile = async (req, res) => {
     const { id } = req.params
     const payload = req.body
 
-    if(!id)
+    if (!id)
         return res.status(400).send('User ID cannot be null')
 
     try {
@@ -118,10 +118,10 @@ const updateProfile = async (req, res) => {
 const followUser = async (req, res) => {
     const { userId, followId } = req.params
 
-    if(!userId)
+    if (!userId)
         return res.status(400).send('User ID cannot be null')
 
-    if(!followId)
+    if (!followId)
         return res.status(400).send('Follow ID cannot be null')
 
     try {
@@ -140,31 +140,31 @@ const followUser = async (req, res) => {
     }
 }
 
-const likeOrDislikePost = async (req,res) => {
+const likeOrDislikePost = async (req, res) => {
     const { id, postId } = req.params
 
-    if (!id) 
+    if (!id)
         return res.status(400).send("ID cannot be null.")
-        
 
-    if (!postId) 
-        return res.status(400).send("Post ID cannot be null.")    
 
-    try{
+    if (!postId)
+        return res.status(400).send("Post ID cannot be null.")
 
-        const result = await UserServiceInstance.likeOrDislikePost(id,postId)
+    try {
 
-        if(!result.success){
-            setError(result.code, result.message)
-            return res.status(result.code).send(result.message)
-        }
+        const result = await UserServiceInstance.likeOrDislikePost(id, postId)
 
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(JSON.stringify(result))
 
-    } catch (error) {        
-        setTrace(500, error)
-        return res.status(500).send(error)
+    } catch (error) {
+        if (error.message == 'User is not exists' || error.message == 'Post is not exists') {
+            setError(404, "Not found")
+            return res.status(404).send(error.message)
+        } else {
+            setTrace(500, error)
+            return res.status(500).send(error)
+        }
     }
 }
 

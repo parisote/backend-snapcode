@@ -6,7 +6,9 @@ const { getUser,
     getFollowers, 
     uploadPfp, 
     getProfile, 
-    likeOrDislikePost } = require('../controllers/user.controller');
+    likeOrDislikePost
+ } = require('../controllers/user.controller');
+const { getUserTimeline } = require('../controllers/timeline.controller') 
 const { validateProfile } = require('../validators/validate.profile.dto')
 const multer = require('multer');
 const { authenticateToken } = require('../helpers/verify.helper')
@@ -20,6 +22,7 @@ userRouter.get("/:id", getUser);
 userRouter.get("/following/:id", getFollowings)
 userRouter.get("/followers/:id", getFollowers)
 userRouter.get("/profile/:id", getProfile)
+userRouter.get("/:id/timeline", authenticateToken, getUserTimeline);
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
