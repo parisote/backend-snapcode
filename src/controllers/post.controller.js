@@ -6,21 +6,21 @@ const createPost = async (req, res) => {
     const { id } = req.params
     const body = req.body
 
-    if(!id){
+    if (!id) {
         setError(404, "Id not found")
         return res.status(404).send("Id not found")
     }
 
-    if (!body){
+    if (!body) {
         setError(404, "Body not found")
         return res.status(404).send("Body not found")
     }
 
     try {
-        const result = await PostService.createPost(body,id)
-        
-        if(!result.success)
-            throw result.post     
+        const result = await PostService.createPost(body, id)
+
+        if (!result.success)
+            throw result.post
 
         setMessage(201, JSON.stringify(result.post))
         return res.status(201).send(JSON.stringify(result.post))
@@ -35,10 +35,10 @@ const getAll = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    try{
+    try {
         const result = await PostService.getAllPost()
 
-        if(!result.success)
+        if (!result.success)
             throw error
 
         setMessage(200, JSON.stringify(result))
@@ -50,7 +50,7 @@ const getAll = async (req, res) => {
 }
 
 const getById = async (req, res) => {
-    try{
+    try {
         const { id } = req.params
 
         if (!id) {
@@ -59,7 +59,7 @@ const getById = async (req, res) => {
 
         const result = await PostService.getById(id)
 
-        if(!result.success)
+        if (!result.success)
             throw error
 
         setMessage(200, JSON.stringify(result))
@@ -71,7 +71,7 @@ const getById = async (req, res) => {
 }
 
 const getByUserId = async (req, res) => {
-    try{
+    try {
         const { id } = req.params
 
         if (!id) {
@@ -80,7 +80,7 @@ const getByUserId = async (req, res) => {
 
         const result = await PostService.getByUserId(id)
 
-        if(!result.success)
+        if (!result.success)
             throw error
 
         setMessage(200, JSON.stringify(result))
@@ -92,7 +92,7 @@ const getByUserId = async (req, res) => {
 }
 
 const getLikedPostsByUserId = async (req, res) => {
-    try{
+    try {
         const { id } = req.params
 
         if (!id) {
@@ -101,12 +101,12 @@ const getLikedPostsByUserId = async (req, res) => {
 
         const result = await PostService.getLikedPostsByUserId(id)
 
-        if(!result.success)
+        if (!result.success)
             throw error
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
-    } catch (error) {        
+        return res.status(200).send(result.post)
+    } catch (error) {
         setTrace(500, error)
         return res.status(500).send(error)
     }

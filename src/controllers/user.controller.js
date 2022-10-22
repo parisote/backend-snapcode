@@ -37,7 +37,7 @@ const uploadPfp = async (req, res) => {
         if (error.name === 'NotFoundError' || error.message) {
             return res.status(404).send('NotFoundError')
         } else {
-            return res.status(500).send(error)
+            return res.status(500).send('error')
         }
     }
 
