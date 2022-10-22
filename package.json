@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/parisote/backend-snapcode#readme",
   "dependencies": {
+    "@ngneat/falso": "^6.1.0",
     "@prisma/client": "^4.3.1",
     "argon2": "^0.29.1",
     "aws-sdk": "^2.1231.0",

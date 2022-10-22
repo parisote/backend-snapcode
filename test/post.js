@@ -1,7 +1,5 @@
 const { default: axios } = require("axios");
 
-let post_id = 0;
-
 describe("Post test",() => {
   it("Post Create OK", async () => {
     const config = { headers: { Authorization: `Bearer ${token}` }};
@@ -13,7 +11,7 @@ describe("Post test",() => {
       fileName: "asd"
     }
 
-    const path = 'http://localhost:3000/api/post/1'
+    const path = 'http://localhost:3000/api/post/'+user_id
     const result = await axios.post(path, body,config);
     post_id = result.data.id
     expect(result.status).toBe(201);
@@ -28,7 +26,7 @@ describe("Post test",() => {
 
   it("Get Post by USER OK", async () => {
     const config = { headers: { Authorization: `Bearer ${token}` }};
-    const path = 'http://localhost:3000/api/post/user/1'
+    const path = 'http://localhost:3000/api/post/user/'+user_id
     const result = await axios.get(path,config);
     expect(result.status).toBe(200);
 });
@@ -41,8 +39,9 @@ describe("Post test",() => {
   });
 
   it("Get Liked Posts by UserID OK", async () => {
-    const path = 'http://localhost:3000/api/post/user/liked/1'
-    const result = await axios.get(path);
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/post/user/liked/'+user_id
+    const result = await axios.get(path,config);
     expect(result.status).toBe(200);
 });
 
@@ -58,7 +57,7 @@ describe("Post test",() => {
           tags: "java9"
         }
 
-      const path = 'http://localhost:3000/api/post/1'
+      const path = 'http://localhost:3000/api/post/'+user_id
 
       await axios.post(path, body).catch(err => {
           expect(err.response.status).toBe(403)
