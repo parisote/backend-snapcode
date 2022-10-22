@@ -30,7 +30,7 @@ const login = async (req, res) => {
         setMessage(200, loginData)
         return res.status(200).send(JSON.stringify(loginData))
     } catch (error) {
-        if (error.message === 'wrong_password') {
+        if (error.message === 'wrong_password' || error.message === 'user_not_found') {
             setError(403, error.message)
             return res.status(403).send(error.message)
         } else {
