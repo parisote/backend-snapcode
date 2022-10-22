@@ -227,6 +227,113 @@ class UserService {
             throw error
         }
     }
+
+    async likeOrDislikePost(id, postId){
+
+        if(!await this.isUserExist(id))
+            return {success:false, code:404, message: 'User is not exists'}
+
+        if(!await this.isPostExist(postId))
+            return {success:false, code:404, message: 'Post is not exists'}
+
+        try{
+
+            const isLiked = await this.prisma.user.findUnique({
+                where: {
+                    id: Number(id)
+                },
+                select:{
+                    likedPosts: {
+                        where:{
+                           id: Number(postId)
+                        }
+                    }
+                }
+            })    
+
+            let result = "" 
+            if(isLiked.likedPosts.length > 0){
+                result = "Dislike"
+                await this.dislike(id, postId)
+            } else {
+                result = "Like"
+                await this.like(id, postId)            
+            }
+
+            return {success:true, code: 200, result: result}
+
+        } catch (error){
+            console.log(error)
+            return {success:false, code:400, message: error}
+        }
+    }
+
+    async like(id, postId){
+        await this.prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                likedPosts: {
+                    connect: [{ id: Number(postId) }],
+                },
+            },
+            select: {
+                id: true
+            }
+        })
+    }
+
+    async dislike(id, postId){
+        await this.prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                likedPosts: {
+                    disconnect: [{ id: Number(postId) }],
+                },
+            },
+            select: {
+                id: true
+            }
+        })
+    }
+
+    async isUserExist(userId){
+        try{
+            const user = await this.prisma.user.findFirst({
+                where: {
+                    id: Number(userId)
+                }
+            })
+
+            if(user == null)
+                return false
+                
+            return true
+        } catch(error){
+            console.log(error)
+            throw error
+        }
+    }
+
+    async isPostExist(postId){
+        try{
+            const post = await this.prisma.post.findFirst({
+                where: {
+                    id: Number(postId)
+                }
+            })
+
+            if(post == null)
+                return false
+                
+            return true
+        } catch(error){
+            throw error
+        }
+    }
 }
 
 module.exports = UserService
