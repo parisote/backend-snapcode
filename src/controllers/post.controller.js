@@ -91,4 +91,25 @@ const getByUserId = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAll, getById, getByUserId }
+const getLikedPostsByUserId = async (req, res) => {
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send("ID cannot be null.")
+        }
+
+        const result = await PostService.getLikedPostsByUserId(id)
+
+        if(!result.success)
+            throw error
+
+        setMessage(200, JSON.stringify(result))
+        return res.status(200).send(JSON.stringify(result))
+    } catch (error) {        
+        setTrace(500, error)
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId }

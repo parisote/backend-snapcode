@@ -61,7 +61,9 @@ class PostService {
             const result = await this.prisma.post.findUniqueOrThrow({
                 where: {
                     id: Number(postId)
-                }
+                }, include: {
+                    code: true,
+                  }
             })
             return { success: true, post: result }
         } catch (error) {
@@ -74,10 +76,27 @@ class PostService {
             const result = await this.prisma.post.findMany({
                 where: {
                     authorId: Number(userId)
-                }
+                }, include: {
+                    code: true,
+                  }
             })
             return { success: true, post: result }
         } catch (error) {
+            return { success: false, post: error }
+        }
+    }
+
+    async getLikedPostsByUserId(userId){
+        try{
+            const result = await this.prisma.user.findMany({
+                where: {
+                    id: Number(userId)
+                }, select: {
+                    likedPosts: true,
+                  }
+            })
+            return { success: true, post: result }
+        } catch (error) {            
             return { success: false, post: error }
         }
     }
