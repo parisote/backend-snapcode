@@ -52,11 +52,19 @@ class PostService {
             const result = await this.prisma.post.findMany({
                 include:{
                     commentaries: true,
-                    likedBy: true
-                }
+                    _count: {
+                        select:{
+                            likedBy: true
+                        }
+                    }
+                },
+                orderBy:[
+                    {id: 'asc'}
+                ]
             })
             return { success: true, post: result }
         } catch (error) {
+            console.log(error)
             return { success: false, post: error }
         }
     }
@@ -69,7 +77,11 @@ class PostService {
                 }, include: {
                     code: true,
                     commentaries: true,
-                    likedBy: true
+                    _count: {
+                        select:{
+                            likedBy: true
+                        }
+                    }
                   }
             })
             return { success: true, post: result }
@@ -99,7 +111,7 @@ class PostService {
                 where: {
                     id: Number(userId)
                 }, select: {
-                    likedPosts: true,
+                    likedPosts: true
                   }
             })
             return { success: true, post: result }

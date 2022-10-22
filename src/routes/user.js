@@ -1,7 +1,15 @@
 const express = require('express');
-const { getUser, updateProfile, followUser, getFollowings, getFollowers, uploadPfp, getProfile } = require('../controllers/user.controller');
+const { getUser, 
+    updateProfile, 
+    followUser, 
+    getFollowings, 
+    getFollowers, 
+    uploadPfp, 
+    getProfile, 
+    likeOrDislikePost } = require('../controllers/user.controller');
 const { validateProfile } = require('../validators/validate.profile.dto')
-const multer = require('multer')
+const multer = require('multer');
+const { authenticateToken } = require('../helpers/verify.helper')
 
 const upload = multer({ dest: 'uploads/' })
 const userRouter = express.Router()
@@ -15,6 +23,7 @@ userRouter.get("/profile/:id", getProfile)
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
+userRouter.post("/:id/like/post/:postId", authenticateToken, likeOrDislikePost)
 
 
 module.exports = userRouter
