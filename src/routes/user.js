@@ -18,13 +18,13 @@ const userRouter = express.Router()
 //traer los controllers
 //a futuro hay que traer el middleware de authorization y de multer (file management)
 
-userRouter.get("/:id", getUser);
-userRouter.get("/following/:id", getFollowings)
-userRouter.get("/followers/:id", getFollowers)
-userRouter.get("/profile/:id", getProfile)
+userRouter.get("/:id", authenticateToken, getUser);
+userRouter.get("/following/:id", authenticateToken, getFollowings)
+userRouter.get("/followers/:id", authenticateToken, getFollowers)
+userRouter.get("/profile/:id", authenticateToken, getProfile)
 userRouter.get("/:id/timeline", authenticateToken, getUserTimeline);
-userRouter.post("/profile/update/:id", validateProfile, updateProfile)
-userRouter.post("/follow/:userId/:followId", followUser)
+userRouter.post("/profile/update/:id", authenticateToken, validateProfile, updateProfile)
+userRouter.post("/follow/:userId/:followId", authenticateToken, followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
 userRouter.post("/:id/like/post/:postId", authenticateToken, likeOrDislikePost)
 
