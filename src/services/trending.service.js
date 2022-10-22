@@ -1,15 +1,18 @@
 const { PrismaClient } = require('@prisma/client')
 
-class TimelineService {
+class TrendingService {
 
     constructor() {
         this.prisma = new PrismaClient()
     }
 
-    async getUserTimeline(userId) {
+    async getTrending() {
+
         const result = await this.prisma.post.findMany({
-            where: {
-                authorId: Number(userId)
+            orderBy: {
+                likedBy: {
+                    _count: 'desc'
+                }
             }
         })
 
@@ -17,4 +20,4 @@ class TimelineService {
     }
 }
 
-module.exports = TimelineService
+module.exports = TrendingService

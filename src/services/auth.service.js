@@ -9,6 +9,34 @@ class AuthService {
         this.prisma = new PrismaClient()
     }
 
+    async register(email, password) {
+        try {
+            const foundUser = await this.prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+
+            if (foundUser) {
+                throw new Error('user_exists')
+            }
+
+            const hashedPassword = await hash(password);
+
+            const user = await this.prisma.user.create({
+                data: {
+                    email: email,
+                    password: hashedPassword
+                }
+            })
+
+            return user
+
+        } catch (error) {
+            throw error
+        }
+    }
+
     async login(email, password) {
 
         try {
@@ -36,36 +64,6 @@ class AuthService {
 
         } catch (error) {
             throw error
-        }
-    }
-
-    async register(email, password) {
-        try {
-            const foundUser = await this.prisma.user.findUnique({
-                where: {
-                    email: email
-                }
-            })
-
-            if (foundUser) {
-                throw new Error('user_exists')
-            }
-
-            const hashedPassword = await hash(password);
-
-            const user = await this.prisma.user.create({
-                data: {
-                    email: email,
-                    password: hashedPassword
-                }
-            })
-
-            return user
-
-        } catch (error) {
-
-            throw error
-
         }
     }
 }

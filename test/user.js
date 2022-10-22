@@ -65,4 +65,28 @@ describe("User test",() => {
     const result = await axios.post(path, '', config)
     expect(result.status).toBe(200);
   })
+
+  it("Like Post Test FAIL USER", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+0+'/like/post/'+post_id
+    await axios.post(path,'',config).catch(err => {
+      expect(err.response.status).toBe(404)
+    });
+  })
+
+  it("Like Post Test FAIL POST", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+user_id+'/like/post/'+0
+    await axios.post(path,'',config).catch(err => {
+      expect(err.response.status).toBe(404)
+    });
+  })
+
+  it("Get timeline OK", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/user/'+user_id+'/timeline'
+    const result = await axios.get(path, config);
+    expect(result.status).toBe(200);
+  });
+
 })
