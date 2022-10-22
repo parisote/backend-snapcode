@@ -127,7 +127,6 @@ const updateProfile = async (req, res) => {
 
         return res.status(500).send(error)
     }
-
 }
 
 const followUser = async (req, res) => {
@@ -149,4 +148,22 @@ const followUser = async (req, res) => {
     }
 }
 
-module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile }
+const getProfileByName = async (req, res) => {
+    const { username } = req.params
+
+    try {
+
+        const profiles = await UserServiceInstance.getProfilesByName(username)
+
+        return res.status(200).send(JSON.stringify(profiles))
+
+    } catch (error) {
+        if (error.name === 'NotFoundError') {
+            return res.status(404).send(error)
+        }
+
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile, getProfileByName }

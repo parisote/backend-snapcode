@@ -1,5 +1,12 @@
 const express = require('express');
-const { getUser, updateProfile, followUser, getFollowings, getFollowers, uploadPfp, getProfile } = require('../controllers/user.controller');
+const { getUser, 
+    updateProfile, 
+    followUser, 
+    getFollowings, 
+    getFollowers, 
+    uploadPfp, 
+    getProfile, 
+    getProfileByName } = require('../controllers/user.controller');
 const { validateProfile } = require('../validators/validate.profile.dto')
 const multer = require('multer')
 
@@ -15,6 +22,7 @@ userRouter.get("/profile/:id", getProfile)
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
+userRouter.get("/profile/search/:username", getProfileByName)
 
 
 module.exports = userRouter

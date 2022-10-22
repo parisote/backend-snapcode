@@ -205,6 +205,7 @@ class UserService {
                     })
                 return newProfile
             }
+            
             const updatedProfile = await this.prisma.profile.update({
                 where: {
                     id: Number(profile.id)
@@ -221,6 +222,29 @@ class UserService {
             })
 
             return updatedProfile
+
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async getProfilesByName(username) {
+
+        try {
+            const profiles = await this.prisma.profile
+                .findMany({
+                    where: {
+                        username: {
+                            contains: username}
+                    },
+                    select: {
+                        id: true,
+                        username: true,
+                        userId: true
+                    }
+                })
+
+            return profiles
 
         } catch (error) {
             throw error
