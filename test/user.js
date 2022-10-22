@@ -47,7 +47,7 @@ describe("User test",() => {
   })
 
   it("Follow User Test", async () => {
-    const path = 'http://localhost:3000/api/user/follow/'+user_id+'/7'
+    const path = 'http://localhost:3000/api/user/follow/'+user_id+'/'+user_id_second
     const result = await axios.post(path)
     expect(result.status).toBe(201);
   })
