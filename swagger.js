@@ -1,4 +1,4 @@
-const swaggerAutogen = require('swagger-autogen')();
+const swaggerAutogen = require('swagger-autogen')({openapi: '3.0.0'});
 
 const doc = {
   info: {
@@ -18,7 +18,13 @@ const doc = {
     },
     // { ... }
   ],
-  securityDefinitions: {},  // by default: empty object
+  securityDefinitions: {
+    bearerAuth: {
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT'
+    }
+  },  // by default: empty object
   definitions: {},          // by default: empty object (Swagger 2.0)
   components: {}            // by default: empty object (OpenAPI 3.x)
 };
