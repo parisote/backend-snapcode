@@ -7,7 +7,7 @@ const { authenticateToken } = require('../helpers/verify.helper')
 postRouter.get("/", authenticateToken, getAll)
 postRouter.get("/:id", authenticateToken, getById)
 postRouter.get("/user/:id", authenticateToken, getByUserId)
-postRouter.post("/:id", validatePost, authenticateToken, , createPost)
+postRouter.post("/:id", validatePost, authenticateToken, createPost)
 postRouter.get("/user/liked/:id", authenticateToken, getLikedPostsByUserId)
 
 module.exports = postRouter
