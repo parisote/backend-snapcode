@@ -56,7 +56,6 @@ class PostService {
                 { id: 'asc' }
             ]
         })
-
         return result
     }
 
@@ -78,15 +77,29 @@ class PostService {
         return result
     }
 
+    async getById(postId) {
+        const result = await this.prisma.post.findUniqueOrThrow({
+            where: {
+                id: Number(postId)
+            }, include: {
+                code: true,
+                commentaries: true,
+                likedBy: true
+            }
+        })
+        return result
+    }
+
     async getByUserId(userId) {
         const result = await this.prisma.post.findMany({
             where: {
                 authorId: Number(userId)
             }, include: {
                 code: true,
+                likedBy: true,
+                commentaries: true,
             }
         })
-
         return result
     }
 
@@ -95,13 +108,17 @@ class PostService {
             where: {
                 id: Number(userId)
             }, select: {
-                likedPosts: true
+                likedPosts: {
+                    include: {
+                        code: true,
+                        likedBy: true,
+                        commentaries: true
+                    }
+                }
             }
         })
-
         return result
     }
-
 }
 
 module.exports = PostService

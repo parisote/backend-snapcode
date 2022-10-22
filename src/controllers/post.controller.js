@@ -9,12 +9,12 @@ const createPost = async (req, res) => {
     const { id } = req.params
     const body = req.body
 
-    if(!id){
+    if (!id) {
         setError(404, "Id not found")
         return res.status(404).send("Id not found")
     }
 
-    if (!body){
+    if (!body) {
         setError(404, "Body not found")
         return res.status(404).send("Body not found")
     }
@@ -35,7 +35,7 @@ const getAll = async (req, res) => {
     /* #swagger.security = [{
             "bearerAuth": []
     }] */
-    try{
+    try {
         const result = await PostService.getAllPost()
 
         setMessage(200, JSON.stringify(result))
@@ -52,6 +52,7 @@ const getById = async (req, res) => {
         "bearerAuth": []
     }] */
     try{
+
         const { id } = req.params
 
         if (!id) {
@@ -102,8 +103,8 @@ const getLikedPostsByUserId = async (req, res) => {
         const result = await PostService.getLikedPostsByUserId(id)
 
         setMessage(200, JSON.stringify(result))
-        return res.status(200).send(JSON.stringify(result))
-    } catch (error) {        
+        return res.status(200).send(result.post)
+    } catch (error) {
         setTrace(500, error)
         return res.status(500).send(error)
     }
