@@ -40,6 +40,8 @@ class UserService {
 
         const result = await this.S3.uploadFile(`${file.filename}rs`)
 
+        console.log(result)
+
         await this.unlinkFile(`uploads/${file.filename}rs`)
         await this.unlinkFile(file.path)
 
@@ -148,7 +150,7 @@ class UserService {
         const { name, username, pfp, biography,
             workingAt, location, linkedIn, twitter } = payload
 
-        if(!this.isUserExist(userId))
+        if (!this.isUserExist(userId))
             throw new Error('User not found')
 
         const profile = await this.prisma
@@ -193,6 +195,39 @@ class UserService {
         return updatedProfile
     }
 
+    async getProfilesByName(username) {
+
+        const profiles = await this.prisma.profile
+            .findMany({
+                where: {
+                    username: {
+                        contains: username
+                    }
+                },
+                select: {
+                    id: true,
+                    username: true,
+                    userId: true,
+                    pfp: true
+                }
+            })
+
+        const file = await this.S3.getFileStream(profiles[1].pfp)
+        const newFile = this.resizeImage(file)
+        console.log(newFile)
+
+        return profiles
+    }
+
+    async resizeImage(imageData) {
+        var img = new Buffer.from(imageData, 'base64');
+        const resizedImageBuffer = await sharp(img).resize(64, 64).toBuffer()
+        
+        let resizedImageData = resizedImageBuffer.toString('base64');
+        let resizedBase64 = `data:image/png;base64,${resizedImageData}`;
+        
+        return resizedBase64
+    }
 
     async likeOrDislikePost(id, postId) {
 
@@ -289,30 +324,6 @@ class UserService {
                 return false
 
             return true
-        } catch (error) {
-            throw error
-        }
-    }
-
-    async getProfilesByName(username) {
-
-        try {
-            const profiles = await this.prisma.profile
-                .findMany({
-                    where: {
-                        username: {
-                            contains: username
-                        }
-                    },
-                    select: {
-                        id: true,
-                        username: true,
-                        userId: true
-                    }
-                })
-
-            return profiles
-
         } catch (error) {
             throw error
         }

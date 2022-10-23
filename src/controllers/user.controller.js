@@ -168,7 +168,7 @@ const getProfileByName = async (req, res) => {
 
         const profiles = await UserServiceInstance.getProfilesByName(username)
 
-        return res.status(200).send(JSON.stringify(profiles))
+        return res.status(200).send(profiles)
 
     } catch (error) {
         if (error.name === 'NotFoundError') {

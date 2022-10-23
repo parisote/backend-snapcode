@@ -23,10 +23,9 @@ userRouter.get("/following/:id", getFollowings)
 userRouter.get("/followers/:id", getFollowers)
 userRouter.get("/profile/:id", getProfile)
 userRouter.get("/:id/timeline", authenticateToken, getUserTimeline);
-userRouter.get("/profile/search/:username", getProfileByName)
+userRouter.get("/profile/search/:username", authenticateToken, getProfileByName)
 userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", followUser)
 userRouter.post("/avatar/upload/:id", upload.single('image'), uploadPfp)
 userRouter.post("/:id/like/post/:postId", authenticateToken, likeOrDislikePost)
-
 module.exports = userRouter
