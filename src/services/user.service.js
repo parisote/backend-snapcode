@@ -148,8 +148,9 @@ class UserService {
         const { name, username, pfp, biography,
             workingAt, location, linkedIn, twitter } = payload
 
-        if(!this.isUserExist(userId))
+        if(!await this.isUserExist(userId))
             throw new Error("UserNotFound")
+
 
         const profile = await this.prisma
             .profile.findFirst({
@@ -172,12 +173,12 @@ class UserService {
                         workingAt: workingAt,
                         location: location,
                         linkedIn: linkedIn,
-                        twitter: twitter,
-                        pfp: '11c3a07db76d29cdf6238c9eef528ccfrs'
+                        twitter: twitter
                     }
                 })
             return newProfile
         }
+
         const updatedProfile = await this.prisma.profile.update({
             where: {
                 id: Number(profile.id)
@@ -194,6 +195,46 @@ class UserService {
         })
 
         return updatedProfile
+    }
+
+    async getProfilesByName(username) {
+
+        const profiles = await this.prisma.profile
+            .findMany({
+                where: {
+                    username: {
+                        contains: username
+                    }
+                },
+                select: {
+                    id: true,
+                    username: true,
+                    userId: true,
+                    pfp: true
+                }
+            })
+
+        for(let i = 0;i < profiles.length; i++){
+            let p = profiles[i] 
+            if(p.pfp != null){
+                const file = await this.S3.getFileStream(p.pfp)
+                const newFile = await this.resizeImage(file)
+                p.image = newFile
+            }
+            profiles[i] = p
+        }
+
+        return profiles
+    }
+
+    async resizeImage(imageData) {
+        var img = new Buffer.from(imageData, 'base64');
+        const resizedImageBuffer = await sharp(img).resize(24, 24).toBuffer()
+        
+        let resizedImageData = resizedImageBuffer.toString('base64');
+        let resizedBase64 = `data:image/png;base64,${resizedImageData}`;
+        
+        return resizedBase64
     }
 
     async likeOrDislikePost(id, postId) {
@@ -303,9 +344,6 @@ class UserService {
                     username: username
                 }
             })
-
-            console.log("PRO ",profile)
-            console.log(profile == null)
 
             if (profile == null)
                 return false

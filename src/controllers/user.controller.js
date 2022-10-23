@@ -19,6 +19,29 @@ const getUser = async (req, res) => {
 }
 
 const uploadPfp = async (req, res) => {
+    /*	#swagger.requestBody = {
+            required: true,
+            content: {
+                "multipart/form-data": {
+                schema: {
+                type: "object",
+                properties: {
+                  image: {
+                    type: "string",
+                    format: "binary",
+                    nullable: true
+                  }
+                }
+              },
+              encoding: {
+                file: {
+                  style: "form"
+                }
+              }
+            }
+        } 
+    }
+    */
     const { id } = req.params
     const file = req.file
 
@@ -147,6 +170,24 @@ const followUser = async (req, res) => {
     }
 }
 
+const getProfileByName = async (req, res) => {
+    const { username } = req.params
+
+    try {
+
+        const profiles = await UserServiceInstance.getProfilesByName(username)
+
+        return res.status(200).send(profiles)
+
+    } catch (error) {
+        if (error.name === 'NotFoundError') {
+            return res.status(404).send(error)
+        }
+
+        return res.status(500).send(error)
+    }
+}
+
 const likeOrDislikePost = async (req, res) => {
     const { id, postId } = req.params
 
@@ -175,4 +216,4 @@ const likeOrDislikePost = async (req, res) => {
     }
 }
 
-module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile, likeOrDislikePost }
+module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile, getProfileByName, likeOrDislikePost }

@@ -32,9 +32,10 @@ describe("User test",() => {
 
   it("Profile Update Test", async () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
+    username = randFirstName()
     const body = {
         name: "test",
-        username: randFirstName(),
+        username: username,
         biography: "soy un test",
         workingAt: "testInc",
         location: "internet",
@@ -45,6 +46,13 @@ describe("User test",() => {
     const result = await axios.post(path,body,config)
     expect(result.status).toBe(201);
   })
+
+  it("Get Profile by name OK", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/user/profile/search/'+username
+    const result = await axios.get(path,config);
+    expect(result.status).toBe(200);
+});
 
   it("Profile Test", async () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
