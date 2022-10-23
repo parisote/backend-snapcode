@@ -8,10 +8,17 @@ class TrendingService {
 
     async getTrending() {
         const result = await this.prisma.post.findMany({
-            include: {
+            select:{
+                text: true,
+                tags: true,
+                createdAt: true,
                 code: true,
-                likedBy: true,
                 commentaries: true,
+                likedBy:{
+                    select:{
+                       id:true
+                    }
+                }          
             },
             orderBy: {
                 likedBy: {
