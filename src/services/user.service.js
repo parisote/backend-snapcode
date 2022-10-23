@@ -212,16 +212,22 @@ class UserService {
                 }
             })
 
-        const file = await this.S3.getFileStream(profiles[1].pfp)
-        const newFile = this.resizeImage(file)
-        console.log(newFile)
+        for(let i = 0;i < profiles.length; i++){
+            let p = profiles[i] 
+            if(p.pfp != null){
+                const file = await this.S3.getFileStream(p.pfp)
+                const newFile = await this.resizeImage(file)
+                p.image = newFile
+            }
+            profiles[i] = p
+        }
 
         return profiles
     }
 
     async resizeImage(imageData) {
         var img = new Buffer.from(imageData, 'base64');
-        const resizedImageBuffer = await sharp(img).resize(64, 64).toBuffer()
+        const resizedImageBuffer = await sharp(img).resize(24, 24).toBuffer()
         
         let resizedImageData = resizedImageBuffer.toString('base64');
         let resizedBase64 = `data:image/png;base64,${resizedImageData}`;
