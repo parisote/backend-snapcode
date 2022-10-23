@@ -88,7 +88,7 @@ class PostService {
                     select:{
                        id:true,
                        text:true,
-                       imageUrl: true,
+                       imgUrl: true,
                        postId: true,
                        authorId: true,
                        likedBy:{ select:{ id:true }}   
