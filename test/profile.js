@@ -17,8 +17,9 @@ describe("Profile test", () => {
     });
 
     it("Get Profile by name OK", async () => {
+        const config = { headers: { Authorization: `Bearer ${token}` } };
         const path = 'http://localhost:3000/api/user/profile/search/algo'
-        const result = await axios.get(path);
+        const result = await axios.get(path,config);
         expect(result.status).toBe(200);
     });
 })
