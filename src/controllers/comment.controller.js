@@ -7,22 +7,22 @@ const createComment = async (req,res) => {
         "bearerAuth": []
     }] */
     const { id } = req.params
-    const comment = req.body
+    const body = req.body
 
     if (!id) {
         setError(404, "Post ID cannot be null.")
         return res.status(400).send("Post ID cannot be null.")
     }
 
-    if(!comment){
+    if(!body){
         setError(404, "Body cannot be null.")
-        return res.status(400).send("Body cannot be null.")
+        return res.status(404).send("Body cannot be null.")
     }
 
     try {
-        const comment = await CommentService.createComment(id, comment)
-        setMessage(200, JSON.stringify(comment))
-        return res.status(200).send(comment)
+        const comment = await CommentService.createComment(id, body)
+        setMessage(201, JSON.stringify(comment))
+        return res.status(201).send(comment)
     } catch (error) {
         setTrace(500, error)
         return res.status(500).send()

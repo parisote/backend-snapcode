@@ -67,7 +67,7 @@ model Comment {
   id        Int      @id @default(autoincrement())
   //
   text      String?
-  imgUrl    String?
+  imageUrl  String?
   createdAt DateTime @default(now())
   //relations
   likedBy   User[]   @relation(name: "likedComments")

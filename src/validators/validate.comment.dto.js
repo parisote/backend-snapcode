@@ -7,6 +7,7 @@ const validateComment = [
         .withMessage('text is needed'),
     check('authorId')
         .exists()
+        .isNumeric()
         .withMessage('AuthorId is needed'),
     (req, res, next) => {
         validateResult(req, res, next)

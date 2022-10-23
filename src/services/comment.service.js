@@ -7,7 +7,7 @@ class CommentService {
         this.prisma = new PrismaClient()
     }
 
-    async createComment(comment, postId) {
+    async createComment(postId, comment) {
         const post = await this.prisma.post.findUniqueOrThrow({
             where: {
                 id: Number(postId)

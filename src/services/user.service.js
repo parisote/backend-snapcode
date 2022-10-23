@@ -304,9 +304,6 @@ class UserService {
                 }
             })
 
-            console.log("PRO ",profile)
-            console.log(profile == null)
-
             if (profile == null)
                 return false
 

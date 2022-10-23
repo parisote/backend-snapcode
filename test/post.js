@@ -56,10 +56,35 @@ describe("Post test", () => {
       videoUrl: "asd8",
       tags: "java9"
     }
-
+    const config = { headers: { Authorization: `Bearer ${token}` } };
     const path = 'http://localhost:3000/api/post/' + user_id
 
-    await axios.post(path, body).catch(err => {
+    await axios.post(path, body, config).catch(err => {
+      expect(err.response.status).toBe(403)
+    });
+  })
+
+  it("Create Comment OK", async () => {
+    const body = {
+      text: "asd2",
+      imageUrl: "asd3",
+      authorId: user_id
+    }
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/post/'+post_id+'/comment'
+    const result = await axios.post(path, body, config);
+    expect(result.status).toBe(201);
+  });
+
+  it("Create Comment FAIL", async () => {
+    const body = {
+      text: "asd2",
+      imageUrl: "asd3"
+    }
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/post/' + post_id + '/comment'
+
+    await axios.post(path, body, config).catch(err => {
       expect(err.response.status).toBe(403)
     });
   })
