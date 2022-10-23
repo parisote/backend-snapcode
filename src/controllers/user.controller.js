@@ -116,23 +116,32 @@ const updateProfile = async (req, res) => {
     const { id } = req.params
     const payload = req.body
 
-    if (!id)
+    if (!id){
+        setError(400, 'User ID cannot be null')
         return res.status(400).send('User ID cannot be null')
+    }
 
     try {
 
         const profileUpdated = await UserServiceInstance
             .updateProfile(id, payload)
 
+        setMessage(200, JSON.stringify(profileUpdated))
         return res.status(201).send(profileUpdated)
 
     } catch (error) {
-
-        if (error.name === 'NotFoundError') {
-            return res.status(404).send(error)
+        if (error.message === 'UsernameAlreadyExist'){
+            setError(400, "Username already exist")
+            return res.status(400).send("Username already exist")        
         }
 
-        return res.status(500).send(error)
+        if(error.message === "UserNotFound"){
+            setError(404, "User not found")
+            return res.status(404).send("User not found")
+        }
+
+        setTrace(500, error)
+        return res.status(500).send()
     }
 }
 

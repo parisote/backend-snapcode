@@ -150,8 +150,9 @@ class UserService {
         const { name, username, pfp, biography,
             workingAt, location, linkedIn, twitter } = payload
 
-        if (!this.isUserExist(userId))
-            throw new Error('User not found')
+        if(!await this.isUserExist(userId))
+            throw new Error("UserNotFound")
+
 
         const profile = await this.prisma
             .profile.findFirst({
@@ -159,6 +160,9 @@ class UserService {
                     userId: Number(userId)
                 }
             })
+
+        if(await this.isUserNameExist(username))
+            throw new Error('UsernameAlreadyExist')        
 
         if (!profile) {
             const newProfile = await this.prisma
@@ -327,6 +331,26 @@ class UserService {
             })
 
             if (post == null)
+                return false
+
+            return true
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async isUserNameExist(username){
+        try {
+            const profile = await this.prisma.profile.findFirst({
+                where: {
+                    username: username
+                }
+            })
+
+            console.log("PRO ",profile)
+            console.log(profile == null)
+
+            if (profile == null)
                 return false
 
             return true
