@@ -1,4 +1,5 @@
 const { default: axios } = require("axios");
+const { randFirstName } = require('@ngneat/falso');
 
 describe("User test",() => {
   it("GetUser Test", async () => {
@@ -28,7 +29,7 @@ describe("User test",() => {
   it("Profile Update Test", async () => {
     const body = {
         name: "test",
-        username: "testeo",
+        username: randFirstName(),
         biography: "soy un test",
         workingAt: "testInc",
         location: "internet",

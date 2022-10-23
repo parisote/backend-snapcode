@@ -158,8 +158,8 @@ class UserService {
                 }
             })
 
-        if(this.isUserNameExist(username))
-            throw new Error('UsernameAlreadyExist')
+        if(await this.isUserNameExist(username))
+            throw new Error('UsernameAlreadyExist')        
 
         if (!profile) {
             const newProfile = await this.prisma
@@ -303,6 +303,9 @@ class UserService {
                     username: username
                 }
             })
+
+            console.log("PRO ",profile)
+            console.log(profile == null)
 
             if (profile == null)
                 return false
