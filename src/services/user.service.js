@@ -40,8 +40,6 @@ class UserService {
 
         const result = await this.S3.uploadFile(`${file.filename}rs`)
 
-        console.log(result)
-
         await this.unlinkFile(`uploads/${file.filename}rs`)
         await this.unlinkFile(file.path)
 
@@ -346,9 +344,6 @@ class UserService {
                     username: username
                 }
             })
-
-            console.log("PRO ",profile)
-            console.log(profile == null)
 
             if (profile == null)
                 return false
