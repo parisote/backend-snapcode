@@ -15,7 +15,7 @@ class PostService {
         })
 
         if (!user)
-            return { success: false, post: 'User not found' }
+           throw new Error('User not found')
 
         const result = await this.prisma.post.create({
             data: {
@@ -57,26 +57,7 @@ class PostService {
             ]
         })
         return result
-    }
-
-    /*async getById(postId) {
-        const result = await this.prisma.post.findUniqueOrThrow({
-            where: {
-                id: Number(postId)
-            }, include: {
-                code: true,
-                commentaries: true,      
-                _count: {
-                    select: {
-                        likedBy: true
-                    }
-                }
-            }
-        })
-
-        return result
-    }*/
-    
+    }    
 
     async getById(postId) {
         const result = await this.prisma.post.findUniqueOrThrow({

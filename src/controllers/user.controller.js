@@ -2,7 +2,6 @@ const UserService = require('../services/user.service')
 const UserServiceInstance = new UserService()
 const { setMessage, setTrace, setError } = require('../utils/log')
 
-//ej basico. me gustaria hacer dtos para checkear la validez de lo que viene por body/params.
 const getUser = async (req, res) => {
     const { id } = req.params
 
