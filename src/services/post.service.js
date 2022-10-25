@@ -138,6 +138,49 @@ class PostService {
         })
         return result
     }
+
+    async getFeed(userId) {
+        const result = await this.prisma.follow.findMany({
+            where: {
+                followingId: Number(userId)
+            }, select: {
+                followed: {
+                    select:{                        
+                        posts: {
+                            orderBy:{
+                                createdAt: 'desc'
+                            },
+                            include:{
+                                code: {
+                                    select:{
+                                        value: true,
+                                        language: true,
+                                        theme: true,
+                                        options: true
+                                    }
+                                },
+                                commentaries: {
+                                    include:{
+                                        likedBy: true
+                                    }
+                                },
+                                likedBy: true
+                            },                           
+                        },                        
+                    }
+                }
+            }
+        })
+        let allPosts = []
+
+        result.forEach((item) => {
+            item.followed.posts.forEach((post) => {
+                allPosts.push(post)
+        })
+    })
+
+        return allPosts
+    }
 }
 
 module.exports = PostService
