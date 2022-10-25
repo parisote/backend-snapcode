@@ -35,4 +35,4 @@ const getAllComments = (req, res) => {
     }] */
 }
 
-module.exports = { getAllComments, createComment, likeComment }
+module.exports = { getAllComments, createComment }

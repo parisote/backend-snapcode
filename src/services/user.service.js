@@ -314,13 +314,14 @@ class UserService {
     }
 
     async likeOrDislikeComment(userId, commentId) {
+
+        if(!await this.isUserExist(userId))
+            throw new Error("UserNotFound")
+
         if (!await this.isCommentExist(commentId))
             throw new Error('CommentNotFound')
 
-        if(!this.isUserExist(userId))
-            throw new Error("UserNotFound")
-
-        const liked = isCommentLiked(userId, postId);
+        const liked = await this.isCommentLiked(userId, commentId);
 
         let result = ""
         if(liked){
@@ -386,7 +387,7 @@ class UserService {
     async isCommentLiked(userId, commentId){
         const isLiked = await this.prisma.user.findUnique({
             where: {
-                id: Number(id)
+                id: Number(userId)
             },
             select: {
                 likedComments: {

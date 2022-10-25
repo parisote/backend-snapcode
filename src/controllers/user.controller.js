@@ -216,7 +216,7 @@ const likeOrDislikePost = async (req, res) => {
 
     } catch (error) {
         if (error.message == 'User is not exists' || error.message == 'Post is not exists') {
-            setError(404, "Not found")
+            setError(404, "User or Post not found")
             return res.status(404).send(error.message)
         } else {
             setTrace(500, error)
@@ -232,11 +232,13 @@ const likeOrDislikeComment = async (req, res) => {
     const { id, commentId } = req.params
 
     if (!id) {
+        console.log("ID ", id)
         setError(404, "User ID cannot be null.")
         return res.status(400).send("User ID cannot be null.")
     }
 
     if (!commentId) {
+        console.log("ID ", commentId)
         setError(404, "Comment ID cannot be null.")
         return res.status(400).send("Comment ID cannot be null.")
     }
@@ -246,9 +248,14 @@ const likeOrDislikeComment = async (req, res) => {
         setMessage(200, JSON.stringify(comment))
         return res.status(200).send(comment)
     } catch (error) {
-        if(error.message == "CommentNotFound" || error.message == "UserNotFound"){
-            setError(404, "User or Comment not found")
-            return res.status(404).send("User or Comment not found")
+        if(error.message == "CommentNotFound"){
+            setError(404, "Comment not found")
+            return res.status(404).send("Comment not found")
+        }
+
+        if(error.message == "UserNotFound"){
+            setError(404, "User not found")
+            return res.status(404).send("User not found")
         }
 
         setTrace(500, error)

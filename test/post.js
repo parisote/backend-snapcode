@@ -73,6 +73,7 @@ describe("Post test", () => {
     const config = { headers: { Authorization: `Bearer ${token}` } };
     const path = 'http://localhost:3000/api/post/'+post_id+'/comment'
     const result = await axios.post(path, body, config);
+    comment_id = result.data.id
     expect(result.status).toBe(201);
   });
 
