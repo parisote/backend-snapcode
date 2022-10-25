@@ -34,7 +34,9 @@ class S3 {
             Bucket: this.bucketName
         }
 
-        return this.s3.getObject(downloadParams).createReadStream()
+        const file = await this.s3.getObject(downloadParams).promise()
+
+        return file.Body.toString('base64');
     }
 
     removeFile = async (fileKey) => {

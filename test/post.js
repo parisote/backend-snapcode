@@ -89,4 +89,11 @@ describe("Post test", () => {
       expect(err.response.status).toBe(403)
     });
   })
+
+  it("Get Leaderboard OK", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/trending'
+    const result = await axios.get(path, config);
+    expect(result.status).toBe(200);
+  });
 })

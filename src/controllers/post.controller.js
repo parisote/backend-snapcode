@@ -56,7 +56,8 @@ const getById = async (req, res) => {
         const { id } = req.params
 
         if (!id) {
-            return res.status(400).send()
+            setError(400, 'Id cannot be null')
+            return res.status(400).send('Id cannot be null')
         }
 
         const result = await PostService.getById(id)

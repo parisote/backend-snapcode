@@ -57,7 +57,7 @@ class PostService {
             ]
         })
         return result
-    }    
+    }
 
     async getById(postId) {
         const result = await this.prisma.post.findUniqueOrThrow({
@@ -65,17 +65,17 @@ class PostService {
                 id: Number(postId)
             }, include: {
                 code: true,
-                commentaries:{
-                    select:{
-                       id:true,
-                       text:true,
-                       imageUrl: true,
-                       postId: true,
-                       authorId: true,
-                       likedBy:{ select:{ id:true }}   
+                commentaries: {
+                    select: {
+                        id: true,
+                        text: true,
+                        imgUrl: true,
+                        postId: true,
+                        authorId: true,
+                        likedBy: { select: { id: true } }
                     }
                 },
-                likedBy: {select:{id:true}}
+                likedBy: { select: { id: true } }
             }
         })
         return result
@@ -87,8 +87,17 @@ class PostService {
                 authorId: Number(userId)
             }, include: {
                 code: true,
-                likedBy: true,
-                commentaries: true,
+                commentaries: {
+                    select: {
+                        id: true,
+                        text: true,
+                        imgUrl: true,
+                        postId: true,
+                        authorId: true,
+                        likedBy: { select: { id: true } }
+                    }
+                },
+                likedBy: { select: { id: true } }
             }
         })
         return result

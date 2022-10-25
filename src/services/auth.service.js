@@ -54,7 +54,7 @@ class AuthService {
 
                 delete user.password
 
-                var token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '300s' });
+                var token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '900s' });
 
                 return ({ token, user })
 
