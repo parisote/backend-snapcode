@@ -225,4 +225,35 @@ const likeOrDislikePost = async (req, res) => {
     }
 }
 
-module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile, likeOrDislikePost }
+const likeOrDislikeComment = async (req, res) => {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
+    const { id, commentId } = req.params
+
+    if (!id) {
+        setError(404, "User ID cannot be null.")
+        return res.status(400).send("User ID cannot be null.")
+    }
+
+    if (!commentId) {
+        setError(404, "Comment ID cannot be null.")
+        return res.status(400).send("Comment ID cannot be null.")
+    }
+
+    try {
+        const comment = await UserServiceInstance.likeOrDislikeComment(id, commentId)
+        setMessage(200, JSON.stringify(comment))
+        return res.status(200).send(comment)
+    } catch (error) {
+        if(error.message == "CommentNotFound" || error.message == "UserNotFound"){
+            setError(404, "User or Comment not found")
+            return res.status(404).send("User or Comment not found")
+        }
+
+        setTrace(500, error)
+        return res.status(500).send()
+    }
+}
+
+module.exports = { getUser, getFollowings, updateProfile, followUser, getFollowers, uploadPfp, getProfile, likeOrDislikePost, likeOrDislikeComment }

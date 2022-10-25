@@ -312,6 +312,93 @@ class UserService {
             throw error
         }
     }
+
+    async likeOrDislikeComment(userId, commentId) {
+        if (!await this.isCommentExist(commentId))
+            throw new Error('CommentNotFound')
+
+        if(!this.isUserExist(userId))
+            throw new Error("UserNotFound")
+
+        const liked = isCommentLiked(userId, postId);
+
+        let result = ""
+        if(liked){
+            result = "Like"
+            await this.likeComment(commentId, userId)
+        } else {
+            await this.dislikeComment(commentId, userId)
+            result = "Dislike"
+        }
+
+        return result
+    }
+
+    async likeComment(userId, commentId) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(userId),
+            },
+            data: {
+                likedComments: {
+                    connect: [{ id: Number(commentId) }],
+                },
+            },
+            select: {
+                id: true
+            }
+        })
+    }
+
+    async dislikeComment(commentId, userId) {
+        await this.prisma.user.update({
+            where: {
+                id: Number(userId),
+            },
+            data: {
+                likedComments: {
+                    disconnect: [{ id: Number(commentId) }],
+                },
+            },
+            select: {
+                id: true
+            }
+        })
+    }
+
+    async isCommentExist(commentId) {
+        try {
+            const comment = await this.prisma.post.findFirst({
+                where: {
+                    id: Number(commentId)
+                }
+            })
+
+            if (comment == null)
+                return false
+
+            return true
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async isCommentLiked(userId, commentId){
+        const isLiked = await this.prisma.user.findUnique({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                likedComments: {
+                    where: {
+                        id: Number(commentId)
+                    }
+                }
+            }
+        })
+
+        return isLiked.likedComments.length > 0
+    }
 }
 
 module.exports = UserService

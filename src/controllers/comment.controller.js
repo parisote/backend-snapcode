@@ -2,7 +2,7 @@ const CommentInstanceService = require('../services/comment.service')
 const CommentService = new CommentInstanceService()
 const { setMessage, setError, setTrace } = require('../utils/log')
 
-const createComment = async (req,res) => {
+const createComment = async (req, res) => {
     /* #swagger.security = [{
         "bearerAuth": []
     }] */
@@ -14,7 +14,7 @@ const createComment = async (req,res) => {
         return res.status(400).send("Post ID cannot be null.")
     }
 
-    if(!body){
+    if (!body) {
         setError(404, "Body cannot be null.")
         return res.status(404).send("Body cannot be null.")
     }
@@ -29,10 +29,10 @@ const createComment = async (req,res) => {
     }
 }
 
-const getAllComments = (req,res) => {
+const getAllComments = (req, res) => {
     /* #swagger.security = [{
         "bearerAuth": []
     }] */
 }
 
-module.exports = { getAllComments, createComment }
+module.exports = { getAllComments, createComment, likeComment }

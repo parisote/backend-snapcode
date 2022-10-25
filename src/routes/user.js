@@ -6,7 +6,8 @@ const { getUser,
     getFollowers, 
     uploadPfp, 
     getProfile, 
-    likeOrDislikePost
+    likeOrDislikePost,
+    likeOrDislikeComment
  } = require('../controllers/user.controller');
 const { getUserTimeline } = require('../controllers/timeline.controller') 
 const { validateProfile } = require('../validators/validate.profile.dto')
@@ -27,6 +28,7 @@ userRouter.post("/profile/update/:id", authenticateToken, validateProfile, updat
 userRouter.post("/follow/:userId/:followId", authenticateToken, followUser)
 userRouter.post("/avatar/upload/:id", authenticateToken, upload.single('image'), uploadPfp)
 userRouter.post("/:id/like/post/:postId", authenticateToken, likeOrDislikePost)
+userRouter.post("/:id/like/comment/:commentId", authenticateToken, likeOrDislikeComment)
 
 
 module.exports = userRouter
