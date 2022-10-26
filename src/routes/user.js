@@ -24,7 +24,7 @@ userRouter.get("/followers/:id", authenticateToken, getFollowers)
 userRouter.get("/profile/:id", authenticateToken, getProfile)
 userRouter.get("/:id/timeline", authenticateToken, getUserTimeline);
 userRouter.get("/profile/search/:username", authenticateToken, getProfileByName)
-userRouter.post("/profile/update/:id", authenticateToken, validateProfile, updateProfile)
+userRouter.post("/profile/update/:id", validateProfile, updateProfile)
 userRouter.post("/follow/:userId/:followId", authenticateToken, followUser)
 userRouter.post("/avatar/upload/:id", authenticateToken, upload.single('image'), uploadPfp)
 userRouter.post("/:id/like/post/:postId", authenticateToken, likeOrDislikePost)
