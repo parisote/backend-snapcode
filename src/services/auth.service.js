@@ -9,36 +9,6 @@ class AuthService {
         this.prisma = new PrismaClient()
     }
 
-    async login(email, password) {
-
-        try {
-            const user = await this.prisma.user.findUnique({
-                where: {
-                    email: email
-                }
-            })
-
-            if (!user) {
-                throw new Error('user_not_found')
-            }
-
-            if (await verify(user.password, password)) {
-
-                delete user.password
-
-                var token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '300s' });
-
-                return ({ token, user })
-
-            } else {
-                throw new Error('wrong_password')
-            }
-
-        } catch (error) {
-            throw error
-        }
-    }
-
     async register(email, password) {
         try {
             const foundUser = await this.prisma.user.findUnique({
@@ -63,9 +33,37 @@ class AuthService {
             return user
 
         } catch (error) {
-
             throw error
+        }
+    }
 
+    async login(email, password) {
+
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+
+            if (!user) {
+                throw new Error('user_not_found')
+            }
+
+            if (await verify(user.password, password)) {
+
+                delete user.password
+
+                var token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '900s' });
+
+                return ({ token, user })
+
+            } else {
+                throw new Error('wrong_password')
+            }
+
+        } catch (error) {
+            throw error
         }
     }
 }

@@ -53,7 +53,7 @@ model Post {
   //
   code         Code?     @relation("code")
   text         String?
-  imageUrl    String?
+  imageUrl     String?
   videoUrl     String?
   tags         String?
   commentaries Comment[]
@@ -64,16 +64,17 @@ model Post {
 }
 
 model Comment {
-  id       Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   //
-  text     String?
-  imgUrl   String?
+  text      String?
+  imageUrl  String?
+  createdAt DateTime @default(now())
   //relations
-  likedBy  User[]  @relation(name: "likedComments")
-  Post     Post?   @relation(fields: [postId], references: [id])
-  postId   Int?
-  author   User    @relation(name: "commentAuthor", fields: [authorId], references: [id])
-  authorId Int
+  likedBy   User[]   @relation(name: "likedComments")
+  Post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+  author    User     @relation(name: "commentAuthor", fields: [authorId], references: [id])
+  authorId  Int
 }
 
 model Code {
