@@ -96,4 +96,11 @@ describe("Post test", () => {
     const result = await axios.get(path, config);
     expect(result.status).toBe(200);
   });
+
+  it("Get Feed OK", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` } };
+    const path = 'http://localhost:3000/api/post/user/feed/' + user_id
+    const result = await axios.get(path, config);
+    expect(result.status).toBe(200);
+  });
 })
