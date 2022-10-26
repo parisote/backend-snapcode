@@ -111,4 +111,25 @@ const getLikedPostsByUserId = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId }
+const getFeed = async (req, res) => {
+    /* #swagger.security = [{
+        "bearerAuth": []
+    }] */
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send()
+        }
+
+        const result = await PostService.getFeed(id)
+
+        setMessage(200, JSON.stringify(result))
+        return res.status(200).send(result)
+    } catch (error) {
+        setTrace(500, error)
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId, getFeed }
