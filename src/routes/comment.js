@@ -1,6 +1,8 @@
 const express = require('express')
 const commentRouter = express.Router()
-//traer los controllers
-//a futuro hay que traer el middleware de authorization y de multer (file management)
+const { authenticateToken } = require('../helpers/verify.helper')
+const { getAllComments } = require('../controllers/comment.controller')
+
+commentRouter.get('/:id', authenticateToken, getAllComments)
 
 module.exports = commentRouter

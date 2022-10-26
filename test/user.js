@@ -105,4 +105,34 @@ describe("User test",() => {
     expect(result.status).toBe(200);
   });
 
+  it("Like Comment Test", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+user_id+'/like/comment/'+comment_id
+    const result = await axios.post(path, '', config)
+    expect(result.status).toBe(200);
+  })
+
+  it("Dislike Comment Test", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+user_id+'/like/comment/'+comment_id
+    const result = await axios.post(path, '', config)
+    expect(result.status).toBe(200);
+  })
+
+  it("Like Comment Test FAIL USER", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+0+'/like/comment/'+comment_id
+    await axios.post(path,'',config).catch(err => {
+      expect(err.response.status).toBe(404)
+    });
+  })
+
+  it("Like Comment Test FAIL POST", async () => {
+    const config = { headers: { Authorization: `Bearer ${token}` }};
+    const path = 'http://localhost:3000/api/user/'+user_id+'/like/comment/'+0
+    await axios.post(path,'',config).catch(err => {
+      expect(err.response.status).toBe(404)
+    });
+  })
+
 })
