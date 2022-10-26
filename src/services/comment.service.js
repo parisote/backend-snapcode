@@ -22,6 +22,11 @@ class CommentService {
                 createdAt: new Date(),
                 text: comment.text,
                 imageUrl: comment.imageUrl ? comment.imageUrl : null,
+                Post:{
+                    connect: {
+                        id: Number(postId)
+                    }
+                },
                 author: {
                     connect: {
                         id: Number(comment.authorId)

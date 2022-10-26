@@ -410,7 +410,7 @@ class UserService {
 
     async isCommentExist(commentId) {
         try {
-            const comment = await this.prisma.post.findFirst({
+            const comment = await this.prisma.comment.findFirst({
                 where: {
                     id: Number(commentId)
                 }
