@@ -12,6 +12,7 @@ jobs:
       DATABASE_URL: postgresql://root:test@localhost:5432/snapcode
       DB_PASSWORD: test
       JWT_SECRET: secret
+      KEYS: cosa1,cosa2,cosa3,cosa1,cosa2,cosa3
 
     steps:
     - uses: actions/checkout@v3
