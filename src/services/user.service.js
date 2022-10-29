@@ -5,6 +5,8 @@ const S3 = require('../../s3')
 const { PrismaClient } = require('@prisma/client')
 const { disconnect } = require('process')
 
+const keys = process.env.KEYS?.split(',')
+
 class UserService {
 
     constructor() {
@@ -163,12 +165,16 @@ class UserService {
             throw new Error('UsernameAlreadyExist')
 
         if (!profile) {
+            const rand = (Math.floor(Math.random() * (6 - 1 + 1) + 1)) - 1
+            const p = keys[rand]
+
             const newProfile = await this.prisma
                 .profile.create({
                     data: {
                         userId: Number(userId),
                         name: name,
                         username: username,
+                        pfp: p,
                         biography: biography,
                         workingAt: workingAt,
                         location: location,
