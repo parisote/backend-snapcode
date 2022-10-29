@@ -273,13 +273,11 @@ const likeOrDislikeComment = async (req, res) => {
     const { id, commentId } = req.params
 
     if (!id) {
-        console.log("ID ", id)
         setError(404, "User ID cannot be null.")
         return res.status(400).send("User ID cannot be null.")
     }
 
     if (!commentId) {
-        console.log("ID ", commentId)
         setError(404, "Comment ID cannot be null.")
         return res.status(400).send("Comment ID cannot be null.")
     }

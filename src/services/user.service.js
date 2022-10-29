@@ -341,23 +341,14 @@ class UserService {
         try {
             const userProfile = await this.prisma.profile.findFirst({
                 where: {
-                    userId: Number(userId)
-                }
-            })
-
-            const coincidence = await this.prisma.profile.findFirst({
-                where: {
+                    NOT:{
+                        userId: Number(userId)
+                    },
                     username: username
                 }
             })
 
-            if ((userProfile && coincidence) && (coincidence.username === userProfile.username)) {
-                return false
-            }
-
-            if (coincidence === null) return false
-
-            return true
+            return userProfile !== null
         } catch (error) {
             throw error
         }
@@ -374,11 +365,11 @@ class UserService {
         const liked = await this.isCommentLiked(userId, commentId);
 
         let result = ""
-        if (liked) {
+        if (!liked) {
             result = "Like"
-            await this.likeComment(commentId, userId)
+            await this.likeComment(userId, commentId)
         } else {
-            await this.dislikeComment(commentId, userId)
+            await this.dislikeComment(userId, commentId)
             result = "Dislike"
         }
 
@@ -401,7 +392,7 @@ class UserService {
         })
     }
 
-    async dislikeComment(commentId, userId) {
+    async dislikeComment(userId, commentId) {
         await this.prisma.user.update({
             where: {
                 id: Number(userId),
@@ -439,9 +430,9 @@ class UserService {
             where: {
                 id: Number(userId)
             },
-            select: {
-                likedComments: {
-                    where: {
+            select:{
+                likedComments:{
+                    where:{
                         id: Number(commentId)
                     }
                 }
