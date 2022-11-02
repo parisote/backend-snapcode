@@ -26,6 +26,7 @@ class UserService {
     }
 
     async uploadPfp(userId, file) {
+        const defaultPfp = '11c3a07db76d29cdf6238c9eef528ccfrs'
         const profile = await this.prisma.profile.findFirst({
             where: {
                 userId: Number(userId)
@@ -55,9 +56,11 @@ class UserService {
             }
         })
 
-        await this.S3.removeFile(profile.pfp)
-        const imagePath = `/ avatars / ${result.Key}`
+        if (profile.pfp !== defaultPfp) {
+            await this.S3.removeFile(profile.pfp)
+        }
 
+        const imagePath = `/ avatars / ${result.Key}`
         return imagePath
     }
 
@@ -165,16 +168,13 @@ class UserService {
             throw new Error('UsernameAlreadyExist')
 
         if (!profile) {
-            const rand = (Math.floor(Math.random() * (6 - 1 + 1) + 1)) - 1
-            const p = keys[rand]
-
             const newProfile = await this.prisma
                 .profile.create({
                     data: {
                         userId: Number(userId),
                         name: name,
                         username: username,
-                        pfp: p,
+                        pfp: '11c3a07db76d29cdf6238c9eef528ccfrs',
                         biography: biography,
                         workingAt: workingAt,
                         location: location,
@@ -347,7 +347,7 @@ class UserService {
         try {
             const userProfile = await this.prisma.profile.findFirst({
                 where: {
-                    NOT:{
+                    NOT: {
                         userId: Number(userId)
                     },
                     username: username
@@ -436,9 +436,9 @@ class UserService {
             where: {
                 id: Number(userId)
             },
-            select:{
-                likedComments:{
-                    where:{
+            select: {
+                likedComments: {
+                    where: {
                         id: Number(commentId)
                     }
                 }
