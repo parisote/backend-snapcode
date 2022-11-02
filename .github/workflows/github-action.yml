@@ -12,6 +12,11 @@ jobs:
       DATABASE_URL: postgresql://root:test@localhost:5432/snapcode
       DB_PASSWORD: test
       JWT_SECRET: secret
+      KEYS: a72c572f5059656460f23da2bd3bff1frs,83144455361e3ef9fa81149c1f95af08rs,4228e3fa6835b79bed28754b30622884rs,256e4df0be9f944c194fcae52570ace4rs,44efaf6ecf015b55ea2cce499a13d809rs,3213081bc583bf982fdff2ef276272f3rs
+      AWS_SECRET_KEY: ${{ secret.AWS_SECRET_KEY }}
+      AWS_ACCESS_KEY: ${{ secret.AWS_ACCESS_KEY }}
+      AWS_BUCKET_REGION: ${{ secret.AWS_BUCKET_REGION }}
+      AWS_BUCKET_NAME: ${{ secret.AWS_BUCKET_NAME }}
 
     steps:
     - uses: actions/checkout@v3

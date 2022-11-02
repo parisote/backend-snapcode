@@ -3,6 +3,9 @@ const fs = require('fs')
 const util = require('util')
 const S3 = require('../../s3')
 const { PrismaClient } = require('@prisma/client')
+const { disconnect } = require('process')
+
+const keys = process.env.KEYS?.split(',')
 
 class UserService {
 
@@ -23,6 +26,7 @@ class UserService {
     }
 
     async uploadPfp(userId, file) {
+        const defaultPfp = '11c3a07db76d29cdf6238c9eef528ccfrs'
         const profile = await this.prisma.profile.findFirst({
             where: {
                 userId: Number(userId)
@@ -52,9 +56,11 @@ class UserService {
             }
         })
 
-        await this.S3.removeFile(profile.pfp)
-        const imagePath = `/ avatars / ${result.Key}`
+        if (profile.pfp !== defaultPfp) {
+            await this.S3.removeFile(profile.pfp)
+        }
 
+        const imagePath = `/ avatars / ${result.Key}`
         return imagePath
     }
 
@@ -148,9 +154,8 @@ class UserService {
         const { name, username, pfp, biography,
             workingAt, location, linkedIn, twitter } = payload
 
-        if(!await this.isUserExist(userId))
+        if (!await this.isUserExist(userId))
             throw new Error("UserNotFound")
-
 
         const profile = await this.prisma
             .profile.findFirst({
@@ -159,8 +164,8 @@ class UserService {
                 }
             })
 
-        if(await this.isUserNameExist(username))
-            throw new Error('UsernameAlreadyExist')        
+        if (await this.isUserNameExist(username, userId))
+            throw new Error('UsernameAlreadyExist')
 
         if (!profile) {
             const newProfile = await this.prisma
@@ -169,6 +174,7 @@ class UserService {
                         userId: Number(userId),
                         name: name,
                         username: username,
+                        pfp: '11c3a07db76d29cdf6238c9eef528ccfrs',
                         biography: biography,
                         workingAt: workingAt,
                         location: location,
@@ -214,9 +220,9 @@ class UserService {
                 }
             })
 
-        for(let i = 0;i < profiles.length; i++){
-            let p = profiles[i] 
-            if(p.pfp != null){
+        for (let i = 0; i < profiles.length; i++) {
+            let p = profiles[i]
+            if (p.pfp != null) {
                 const file = await this.S3.getFileStream(p.pfp)
                 const newFile = await this.resizeImage(file)
                 p.image = newFile
@@ -230,10 +236,10 @@ class UserService {
     async resizeImage(imageData) {
         var img = new Buffer.from(imageData, 'base64');
         const resizedImageBuffer = await sharp(img).resize(24, 24).toBuffer()
-        
+
         let resizedImageData = resizedImageBuffer.toString('base64');
         let resizedBase64 = `data:image/png;base64,${resizedImageData}`;
-        
+
         return resizedBase64
     }
 
@@ -337,18 +343,18 @@ class UserService {
         }
     }
 
-    async isUserNameExist(username){
+    async isUserNameExist(username, userId) {
         try {
-            const profile = await this.prisma.profile.findFirst({
+            const userProfile = await this.prisma.profile.findFirst({
                 where: {
+                    NOT: {
+                        userId: Number(userId)
+                    },
                     username: username
                 }
             })
 
-            if (profile == null)
-                return false
-
-            return true
+            return userProfile !== null
         } catch (error) {
             throw error
         }
@@ -356,7 +362,7 @@ class UserService {
 
     async likeOrDislikeComment(userId, commentId) {
 
-        if(!await this.isUserExist(userId))
+        if (!await this.isUserExist(userId))
             throw new Error("UserNotFound")
 
         if (!await this.isCommentExist(commentId))
@@ -365,11 +371,11 @@ class UserService {
         const liked = await this.isCommentLiked(userId, commentId);
 
         let result = ""
-        if(liked){
+        if (!liked) {
             result = "Like"
-            await this.likeComment(commentId, userId)
+            await this.likeComment(userId, commentId)
         } else {
-            await this.dislikeComment(commentId, userId)
+            await this.dislikeComment(userId, commentId)
             result = "Dislike"
         }
 
@@ -392,7 +398,7 @@ class UserService {
         })
     }
 
-    async dislikeComment(commentId, userId) {
+    async dislikeComment(userId, commentId) {
         await this.prisma.user.update({
             where: {
                 id: Number(userId),
@@ -425,7 +431,7 @@ class UserService {
         }
     }
 
-    async isCommentLiked(userId, commentId){
+    async isCommentLiked(userId, commentId) {
         const isLiked = await this.prisma.user.findUnique({
             where: {
                 id: Number(userId)
