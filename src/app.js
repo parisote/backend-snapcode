@@ -10,6 +10,7 @@ const trendingReouter = require('./routes/trending')
 const chalk = require('chalk')
 const log = require('loglevel')
 const prefix = require('loglevel-plugin-prefix');
+const rateLimit = require("express-rate-limit")
 
 const colors = {
   TRACE: chalk.magenta,
@@ -25,6 +26,16 @@ app.set('port', process.env.PORT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: "Exceeded 100 request in 12 hours",
+    standardHEaders: true,
+    legacyHeaders: false,
+  })
+)
 
 /*
 app.use((_req, res, next) => {
