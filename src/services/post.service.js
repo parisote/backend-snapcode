@@ -15,7 +15,7 @@ class PostService {
         })
 
         if (!user)
-           throw new Error('User not found')
+            throw new Error('User not found')
 
         const result = await this.prisma.post.create({
             data: {
@@ -29,6 +29,7 @@ class PostService {
                     {
                         value: post.code,
                         language: post.language,
+                        filename: post.fileName,
                     },
                 },
                 author: {
