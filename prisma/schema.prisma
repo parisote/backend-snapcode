@@ -82,6 +82,7 @@ model Code {
   //
   value    String
   language String
+  filename String
   theme    String?
   options  String?
   //relations

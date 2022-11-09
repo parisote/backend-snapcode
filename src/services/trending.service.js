@@ -22,6 +22,15 @@ class TrendingService {
                     }
                 }          
             },
+            where:{
+                likedBy: {
+                    some:{
+                        email:{
+                            not: ""
+                        } 
+                    }
+                }
+            },
             orderBy: {
                 likedBy: {
                     _count: 'desc'

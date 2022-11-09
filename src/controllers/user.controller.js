@@ -63,14 +63,13 @@ const uploadPfp = async (req, res) => {
         return res.status(400).send('File cannot be null')
     }
 
-
     try {
         const imgPath = await UserServiceInstance.uploadPfp(id, file)
         setMessage(200, imgPath)
         return res.status(201).send(imgPath)
     } catch (error) {
-        if (error.name === 'NotFoundError' || error.message) {
-            setError(400, 'NotFoundError')
+        if (error.message === 'NotFoundError' || error.message) {
+            setError(400, error.message)
             return res.status(404).send('NotFoundError')
         } else {
             setTrace(500, error)
@@ -150,6 +149,7 @@ const updateProfile = async (req, res) => {
     /* #swagger.security = [{
         "bearerAuth": []
     }] */
+    
     const { id } = req.params
     const payload = req.body
 
@@ -273,13 +273,11 @@ const likeOrDislikeComment = async (req, res) => {
     const { id, commentId } = req.params
 
     if (!id) {
-        console.log("ID ", id)
         setError(404, "User ID cannot be null.")
         return res.status(400).send("User ID cannot be null.")
     }
 
     if (!commentId) {
-        console.log("ID ", commentId)
         setError(404, "Comment ID cannot be null.")
         return res.status(400).send("Comment ID cannot be null.")
     }
