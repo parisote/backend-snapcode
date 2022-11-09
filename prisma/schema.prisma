@@ -82,7 +82,7 @@ model Code {
   //
   value    String
   language String
-  filename String
+  filename String  @default("")
   theme    String?
   options  String?
   //relations
