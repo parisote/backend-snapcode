@@ -61,6 +61,7 @@ model Post {
   author       User      @relation(name: "author", fields: [authorId], references: [id])
   authorId     Int
   likedBy      User[]    @relation(name: "likedPosts")
+  visibility  Int @default(0)
 }
 
 model Comment {
