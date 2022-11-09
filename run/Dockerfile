@@ -9,5 +9,6 @@ RUN npm install --production
 COPY . .
 EXPOSE 4000
 RUN npx prisma generate
+RUN npx prisma migrate reset
 RUN npx prisma migrate deploy
 CMD ["npm", "run", "start"]
