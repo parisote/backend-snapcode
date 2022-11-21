@@ -134,12 +134,14 @@ class PostService {
     async getFeed(userId) {
         const result = await this.prisma.follow.findMany({
             where: {
-                followingId: Number(userId),
-                visibility: Number(0)
+                followingId: Number(userId)
             }, select: {
                 followed: {
                     select: {
                         posts: {
+                            where: {
+                                visibility: Number(0)
+                            },
                             orderBy: { createdAt: 'desc' },
                             include: {
                                 code: {
