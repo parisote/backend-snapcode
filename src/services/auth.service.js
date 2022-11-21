@@ -66,6 +66,19 @@ class AuthService {
             throw error
         }
     }
+
+    async getUserByToken(authHeader)
+    {
+        console.log("E4NTRO ACA")
+        const token = authHeader && authHeader.split(' ')[1]
+
+        if (token == null || token == " ") 
+            throw new Error('Token NULO - Sin Token no se puede obtener un usuario')
+        
+        console.log(jwt.decode(token))
+        var {user} = jwt.decode(token);
+        return (user)
+    }
 }
 
 module.exports = AuthService
