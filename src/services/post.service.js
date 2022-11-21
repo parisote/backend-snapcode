@@ -24,6 +24,7 @@ class PostService {
                 imageUrl: post.imageUrl ? post.imageUrl : null,
                 videoUrl: post.videoUrl ? post.imageUrl : null,
                 tags: post.tags,
+                visibility: post.visibility,
                 code: {
                     create:
                     {
@@ -82,10 +83,10 @@ class PostService {
         return result
     }
 
-    async getByUserId(userId) {
+    async getByUserId(userId, userLoggedId) {
         const result = await this.prisma.post.findMany({
             where: {
-                authorId: Number(userId)
+                authorId: Number(userId),
             }, include: {
                 code: true,
                 commentaries: {
@@ -101,7 +102,16 @@ class PostService {
                 likedBy: { select: { id: true } }
             }
         })
-        return result
+        
+        let allPosts = []
+        result.forEach((item) => 
+        {
+            if (item.visibility == Number(0)  || (userId == userLoggedId && item.visibility > Number(0)))
+            {
+                allPosts.push(item)
+            }
+        })
+        return allPosts
     }
 
     async getLikedPostsByUserId(userId) {
@@ -124,7 +134,8 @@ class PostService {
     async getFeed(userId) {
         const result = await this.prisma.follow.findMany({
             where: {
-                followingId: Number(userId)
+                followingId: Number(userId),
+                visibility: Number(0)
             }, select: {
                 followed: {
                     select: {
