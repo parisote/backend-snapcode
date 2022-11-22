@@ -132,6 +132,7 @@ class PostService {
     }
 
     async getFeed(userId) {
+        
         const result = await this.prisma.follow.findMany({
             where: {
                 followingId: Number(userId)
@@ -160,15 +161,25 @@ class PostService {
                 }
             }
         })
-        let allPosts = []
+        
+        let allPosts = []        
 
         result.forEach((item) => {
-            item.followed.posts.forEach((post) => {
+            item.followed.posts.forEach((post) => { 
                 allPosts.push(post)
             })
         })
         allPosts = allPosts.sort(function (a, b) { return b.createdAt - a.createdAt })
         return allPosts
+    }
+
+    async getFeedFiltered(userId, title, from, to) {        
+        let result = await this.getFeed(userId)
+        
+        if(title && title.length > 0){ result = result.filter((post) => post.text.includes(title)) }
+            
+
+         return result
     }
 }
 
