@@ -147,6 +147,7 @@ const getFeedFiltered = async (req, res) => {
         if (!id) {
             return res.status(400).send()
         }
+
         const title = req.query.title
         const from = req.query.from
         const to = req.query.to

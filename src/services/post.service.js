@@ -174,12 +174,18 @@ class PostService {
     }
 
     async getFeedFiltered(userId, title, from, to) {        
-        let result = await this.getFeed(userId)
-        
-        if(title && title.length > 0){ result = result.filter((post) => post.text.includes(title)) }
-            
+        let posts = await this.getFeed(userId)
 
-         return result
+        title = title === "undefined" || title.length === 0? "" : title
+        from = from === "undefined" ? 0 : new Date(`${from}T00:00:00`).getTime()
+        to = to === "undefined" ? 99999999999999 : new Date(`${to}T23:59:59`).getTime()
+        
+        posts = posts.filter((post) => {
+            let createdAt = new Date(post.createdAt).getTime()
+            return ((createdAt >= from && createdAt <= to) && post.text.includes(title))
+        })
+                   
+        return posts
     }
 }
 
