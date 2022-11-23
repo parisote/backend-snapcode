@@ -132,6 +132,7 @@ class PostService {
     }
 
     async getFeed(userId) {
+        
         const result = await this.prisma.follow.findMany({
             where: {
                 followingId: Number(userId)
@@ -160,15 +161,31 @@ class PostService {
                 }
             }
         })
-        let allPosts = []
+        
+        let allPosts = []        
 
         result.forEach((item) => {
-            item.followed.posts.forEach((post) => {
+            item.followed.posts.forEach((post) => { 
                 allPosts.push(post)
             })
         })
         allPosts = allPosts.sort(function (a, b) { return b.createdAt - a.createdAt })
         return allPosts
+    }
+
+    async getFeedFiltered(userId, title, from, to) {        
+        let posts = await this.getFeed(userId)
+
+        title = title === "undefined" || title.length === 0? "" : title
+        from = from === "undefined" ? 0 : new Date(`${from}T00:00:00`).getTime()
+        to = to === "undefined" ? 99999999999999 : new Date(`${to}T23:59:59`).getTime()
+        
+        let filteredPosts = posts.filter((post) => {
+            let createdAt = new Date(post.createdAt).getTime()
+            return ((createdAt >= from && createdAt <= to) && post.text.includes(title))
+        })
+                   
+        return filteredPosts.length === 0? posts : filteredPosts
     }
 }
 

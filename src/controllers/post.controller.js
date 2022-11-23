@@ -140,4 +140,26 @@ const getFeed = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId, getFeed }
+const getFeedFiltered = async (req, res) => {    
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send()
+        }
+
+        const title = req.query.title
+        const from = req.query.from
+        const to = req.query.to
+
+        const result = await PostService.getFeedFiltered(id, title, from, to)        
+
+        setMessage(200, JSON.stringify(result))
+        return res.status(200).send(result)
+    } catch (error) {
+        setTrace(500, error)
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId, getFeed, getFeedFiltered }
