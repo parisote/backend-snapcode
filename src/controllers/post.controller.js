@@ -1,14 +1,18 @@
+const AuthServiceInstance = require('../services/auth.service')
 const PostServiceInstance = require('../services/post.service')
 const PostService = new PostServiceInstance()
+const AuthService = new AuthServiceInstance()
+
 const { setMessage, setError, setTrace } = require('../utils/log')
 
 const createPost = async (req, res) => {
     /* #swagger.security = [{
         "bearerAuth": []
     }] */
+
     const { id } = req.params
     const body = req.body
-
+    
     if (!id) {
         setError(404, "Id not found")
         return res.status(404).send("Id not found")
@@ -75,13 +79,17 @@ const getByUserId = async (req, res) => {
         "bearerAuth": []
     }] */
     try{
-        const { id } = req.params
+        console.log(req.headers['authorization'])
+        var userLogged = await AuthService.getUserByToken(req.headers['authorization'])
 
+        console.log(userLogged)
+
+        const { id } = req.params
         if (!id) {
             return res.status(400).send()
         }
 
-        const result = await PostService.getByUserId(id)
+        const result = await PostService.getByUserId(id, userLogged.id)
 
         setMessage(200, JSON.stringify(result))
         return res.status(200).send(result)
@@ -132,4 +140,26 @@ const getFeed = async (req, res) => {
     }
 }
 
-module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId, getFeed }
+const getFeedFiltered = async (req, res) => {    
+    try{
+        const { id } = req.params
+
+        if (!id) {
+            return res.status(400).send()
+        }
+
+        const title = req.query.title
+        const from = req.query.from
+        const to = req.query.to
+
+        const result = await PostService.getFeedFiltered(id, title, from, to)        
+
+        setMessage(200, JSON.stringify(result))
+        return res.status(200).send(result)
+    } catch (error) {
+        setTrace(500, error)
+        return res.status(500).send(error)
+    }
+}
+
+module.exports = { createPost, getAll, getById, getByUserId, getLikedPostsByUserId, getFeed, getFeedFiltered }

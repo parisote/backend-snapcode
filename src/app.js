@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 999999999,
     message: "Exceeded 100 request in 12 hours",
     standardHEaders: true,
     legacyHeaders: false,

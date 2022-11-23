@@ -23,6 +23,7 @@ class TrendingService {
                 }          
             },
             where:{
+                visibility: Number(0),
                 likedBy: {
                     some:{
                         email:{

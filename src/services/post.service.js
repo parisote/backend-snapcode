@@ -24,6 +24,7 @@ class PostService {
                 imageUrl: post.imageUrl ? post.imageUrl : null,
                 videoUrl: post.videoUrl ? post.imageUrl : null,
                 tags: post.tags,
+                visibility: post.visibility,
                 code: {
                     create:
                     {
@@ -82,10 +83,10 @@ class PostService {
         return result
     }
 
-    async getByUserId(userId) {
+    async getByUserId(userId, userLoggedId) {
         const result = await this.prisma.post.findMany({
             where: {
-                authorId: Number(userId)
+                authorId: Number(userId),
             }, include: {
                 code: true,
                 commentaries: {
@@ -101,7 +102,16 @@ class PostService {
                 likedBy: { select: { id: true } }
             }
         })
-        return result
+        
+        let allPosts = []
+        result.forEach((item) => 
+        {
+            if (item.visibility == Number(0)  || (userId == userLoggedId && item.visibility > Number(0)))
+            {
+                allPosts.push(item)
+            }
+        })
+        return allPosts
     }
 
     async getLikedPostsByUserId(userId) {
@@ -122,6 +132,7 @@ class PostService {
     }
 
     async getFeed(userId) {
+        
         const result = await this.prisma.follow.findMany({
             where: {
                 followingId: Number(userId)
@@ -129,6 +140,9 @@ class PostService {
                 followed: {
                     select: {
                         posts: {
+                            where: {
+                                visibility: Number(0)
+                            },
                             orderBy: { createdAt: 'desc' },
                             include: {
                                 code: {
@@ -147,15 +161,31 @@ class PostService {
                 }
             }
         })
-        let allPosts = []
+        
+        let allPosts = []        
 
         result.forEach((item) => {
-            item.followed.posts.forEach((post) => {
+            item.followed.posts.forEach((post) => { 
                 allPosts.push(post)
             })
         })
         allPosts = allPosts.sort(function (a, b) { return b.createdAt - a.createdAt })
         return allPosts
+    }
+
+    async getFeedFiltered(userId, title, from, to) {        
+        let posts = await this.getFeed(userId)
+
+        title = title === "undefined" || title.length === 0? "" : title
+        from = from === "undefined" ? 0 : new Date(`${from}T00:00:00`).getTime()
+        to = to === "undefined" ? 99999999999999 : new Date(`${to}T23:59:59`).getTime()
+        
+        let filteredPosts = posts.filter((post) => {
+            let createdAt = new Date(post.createdAt).getTime()
+            return ((createdAt >= from && createdAt <= to) && post.text.includes(title))
+        })
+                   
+        return filteredPosts.length === 0? posts : filteredPosts
     }
 }
 
