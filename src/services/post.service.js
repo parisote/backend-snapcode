@@ -180,12 +180,12 @@ class PostService {
         from = from === "undefined" ? 0 : new Date(`${from}T00:00:00`).getTime()
         to = to === "undefined" ? 99999999999999 : new Date(`${to}T23:59:59`).getTime()
         
-        posts = posts.filter((post) => {
+        let filteredPosts = posts.filter((post) => {
             let createdAt = new Date(post.createdAt).getTime()
             return ((createdAt >= from && createdAt <= to) && post.text.includes(title))
         })
                    
-        return posts
+        return filteredPosts.length === 0? posts : filteredPosts
     }
 }
 
